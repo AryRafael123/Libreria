@@ -18,7 +18,7 @@ def get_db_connection():
 
 @app.route('/')
 def login():
-    return render_template('index.html')
+    return render_template('index_user.html')
       
 
 

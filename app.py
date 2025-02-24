@@ -29,11 +29,25 @@ def index():
         #session empy, so sign in
         return render_template('index.html')
     else:
-        #go to index_user
-        return render_template('index_user.html')
-    
+        #one session before, so let's find out the user type
+        # let's create the conection with our data base
+        connection = get_db_connection()
+        with connection.cursor() as cursor:
+            cursor.execute('SELECT tipo_usuario, correo, contraseña FROM Usuarios')
+            value = cursor.fetchall()
+        connection.close()
 
-      
+        #we need to find out the "tipo_usuario" value
+        for x in range(0,len(value)):
+            if value[x]["correo"] == session["correo"]:
+                if value[x]["tipo_usuario"] == 1: #we know the index user of the session
+                    #admin user
+                    return render_template('index_admin.html')
+                else:
+                    #normal user
+                    return render_template('index_user.html')
+               
+
 
 
 @app.route('/sign_in', methods=['POST'])
@@ -48,9 +62,9 @@ def add_user():
     connection = get_db_connection()
     with connection.cursor() as cursor:
         cursor.execute('SELECT tipo_usuario, correo, contraseña FROM Usuarios')
-
         value = cursor.fetchall()
         connection.close()
+        
     sesion = False
     existe = False
     admin = False
@@ -64,6 +78,7 @@ def add_user():
             if value[x]["tipo_usuario"]==True:
                 #usuario administrador
                 admin = True
+                session['correo'] = mail
             else:
                 print("")
         else:

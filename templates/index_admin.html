@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Library Shopping</title>
+    <link rel="stylesheet" href="../static/css/index_admin_style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <h1>Library Shopping - Admin</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#catalog">Catalog</a></li>
+                <li><a href="#add-book">Add New Book</a></li>
+                <li><a href="#logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="dashboard" class="section">
+        <h2>Admin Dashboard</h2>
+        <p>Welcome, Admin! Manage the library's catalog, add new books, or update existing ones.</p>
+    </section>
+
+    <section id="catalog" class="section">
+        <h2>Manage Catalog</h2>
+        <div class="catalog-items">
+            <div class="item">
+                <h3>Book Title 1</h3>
+                <p>Description of the book.</p>
+                <button>Edit</button>
+                <button>Delete</button>
+            </div>
+            <div class="item">
+                <h3>Book Title 2</h3>
+                <p>Description of the book.</p>
+                <button>Edit</button>
+                <button>Delete</button>
+            </div>
+            <div class="item">
+                <h3>Book Title 3</h3>
+                <p>Description of the book.</p>
+                <button>Edit</button>
+                <button>Delete</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="add-book" class="section">
+        <h2>Add New Book</h2>
+        <form action="submit_book.php" method="POST">
+            <label for="book-title">Book Title:</label>
+            <input type="text" id="book-title" name="book-title" required>
+
+            <label for="book-description">Description:</label>
+            <textarea id="book-description" name="book-description" rows="4" required></textarea>
+
+            <label for="book-price">Price ($):</label>
+            <input type="number" id="book-price" name="book-price" required>
+
+            <button type="submit">Add Book</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Library Shopping Admin. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

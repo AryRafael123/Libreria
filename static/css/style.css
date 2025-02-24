@@ -8174,13 +8174,15 @@ h1, h2, h3, h4, h5,
   background: #fbceb5 !important; }
 
 .ftco-section {
-  padding: 7em 0; }
+  padding: 7em 0;
+  padding-bottom: 22em;
+}
 
 .ftco-no-pt {
   padding-top: 0; }
 
 .ftco-no-pb {
-  padding-bottom: 0; }
+  padding-bottom: 0rem; }
 
 .heading-section {
   font-size: 28px;

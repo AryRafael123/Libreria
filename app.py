@@ -133,7 +133,7 @@ def ADD_USER2():
 
 
 
-@app.route('/log_out',methods=['POST'])
+@app.route('/log_out')
 def LOG_OUT():
     #eliminar la variable sesion
    

@@ -23,6 +23,7 @@ header {
 
 header .logo h1 {
     font-size: 2rem;
+    
 }
 
 nav ul {
@@ -109,6 +110,12 @@ form button {
     border-radius: 4px;
 }
 
+.log_out-button{
+    color: white;
+    border: none;
+    padding: 10px;
+}
+
 form button:hover {
     background-color: #0056b3;
 }
@@ -120,3 +127,19 @@ footer {
     color: white;
     margin-top: 2rem;
 }
+
+.logo{
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
+.button-menu{
+    margin-right: 20px;
+}
+
+.navbar-actions{
+margin-top: 10px;
+}
+

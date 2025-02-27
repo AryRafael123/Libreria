@@ -86,7 +86,7 @@ def add_user():
             
     
     print("existe: ",existe)
-    print("aministrador: ",admin)
+    print("administrador: ",admin)
     print("correo",mail)
     print("sesion: ",session)
     print("secret key: ", app.secret_key)
@@ -163,6 +163,37 @@ def ADD_USER():
 
     return render_template('index.html')
 
+
+
+#This action takes to the template of add user (edit user)
+@app.route('/template_edit_user')
+def template_edit_user():
+
+    return render_template('edit_user.html')
+
+
+
+@app.route('/edit_user', methods=['POST'])
+def EDIT_USER():
+    mail = session["correo"]
+
+    # This is the form data that Flask receives
+    new_name = request.form['name']  # Flask looks for the 'username' key
+    new_last_name = request.form['last_name']
+    new_user_name = request.form['user_name']
+    new_address = request.form['address']
+    new_phone = request.form['phone']
+    new_mail = request.form['mail']
+    new_password = request.form['password']
+        
+    connection = get_db_connection()
+    with connection.cursor() as cursor:
+       
+        cursor.execute ("""UPDATE Usuarios SET nombre=%s, apellido=%s, nombre_usuario=%s, direccion=%s, teléfono=%s, correo=%s, contraseña=%s WHERE correo=%s""", (new_name, new_last_name, new_user_name, new_address, new_phone,new_mail, new_password, mail))
+        connection.commit()
+        connection.close()
+
+    return render_template('index.html')
 
 
 

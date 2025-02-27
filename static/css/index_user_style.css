@@ -53,6 +53,15 @@ nav ul li a:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.slider-container{
+    padding: 2rem;
+    margin: 2rem 0;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+}
+
 h2 {
     font-size: 2rem;
     margin-bottom: 1rem;
@@ -81,9 +90,67 @@ h2 {
     margin-top: 10px;
 }
 
+.releses-items .item-new button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
 .catalog-items .item button:hover {
     background-color: #218838;
 }
+
+.section-releases {
+    position: relative;
+    width:120% ;
+    max-width: 1500px;
+    overflow: hidden;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+
+}
+
+.releses-items {
+    display: flex;
+    
+}
+
+.releses-items .item-new {
+    padding: 20px;
+    box-sizing: border-box;
+    min-width: 25%;
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    border-right: 1px solid #ddd;
+}
+
+.releses-items .item button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+
+.slider-container{
+    display: flex;
+    transition: transform 3s ease-in-out;
+    width: 3000px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+
 
 form {
     display: flex;

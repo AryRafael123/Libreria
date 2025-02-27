@@ -117,26 +117,111 @@
         <p>Your one-stop destination for buying books and educational resources. Find the best books on every subject!</p>
     </section>
 
-    <section id="catalog" class="section">
-        <h2>Our Catalog</h2>
-        <div class="catalog-items">
-            <div class="item">
-                <h3>Book Title 1</h3>
+
+
+    <!--section where the items are shown-->
+    <section class="slider-container">
+      <!-- all the items-->
+      <section id="catalog" class="section-releases">
+        <h2>New releases</h2>
+        <div class="slider">
+            <div class="releses-items">
+              <div class="item-new">
+                  <h3>Book Title 1</h3>
+                  <p>Description of the book.</p>
+                  <button>Buy Now</button>
+              </div>
+              <div class="item-new">
+                  <h3>Book Title 2</h3>
+                  <p>Description of the book.</p>
+                  <button>Buy Now</button>
+              </div>
+              <div class="item-new">
+                  <h3>Book Title 3</h3>
+                  <p>Description of the book.</p>
+                  <button>Buy Now</button>
+              </div>
+              <div class="item-new">
+                <h3>Book Title 4</h3>
                 <p>Description of the book.</p>
                 <button>Buy Now</button>
             </div>
-            <div class="item">
-                <h3>Book Title 2</h3>
-                <p>Description of the book.</p>
-                <button>Buy Now</button>
-            </div>
-            <div class="item">
-                <h3>Book Title 3</h3>
+            <div class="item-new">
+              <h3>Book Title 5</h3>
+              <p>Description of the book.</p>
+              <button>Buy Now</button>
+          </div>
+              <div class="item-new">
+                <h3>Book Title 6</h3>
                 <p>Description of the book.</p>
                 <button>Buy Now</button>
             </div>
         </div>
+        
+      
+
+
+        </div>
+
+        <button class="prev" onclick="moveSlide(-1)">❮</button>
+        <button class="next" onclick="moveSlide(1)">❯</button>
+
+      </section>
     </section>
+      
+
+
+
+
+    <section id="catalog" class="section">
+      <h2>History</h2>
+      <div class="catalog-items">
+          <div class="item">
+              <h3>Book Title 1</h3>
+              <p>Description of the book.</p>
+              <button>Buy Now</button>
+          </div>
+          <div class="item">
+              <h3>Book Title 2</h3>
+              <p>Description of the book.</p>
+              <button>Buy Now</button>
+          </div>
+          <div class="item">
+              <h3>Book Title 3</h3>
+              <p>Description of the book.</p>
+              <button>Buy Now</button>
+          </div>
+      </div>
+
+
+  </section>
+
+  <section id="catalog" class="section">
+    <h2>Philosophy</h2>
+    <div class="catalog-items">
+        <div class="item">
+            <h3>Book Title 1</h3>
+            <p>Description of the book.</p>
+            <button>Buy Now</button>
+        </div>
+        <div class="item">
+            <h3>Book Title 2</h3>
+            <p>Description of the book.</p>
+            <button>Buy Now</button>
+        </div>
+
+        <div class="item">
+            <h3>Book Title 3</h3>
+            <p>Description of the book.</p>
+            <button>Buy Now</button>
+        </div>
+
+    </div>
+  </section>
+
+
+
+
 
     <section id="about" class="section">
         <h2>About Us</h2>
@@ -173,6 +258,34 @@
         })
         }
     </script>
+
+    <script>
+      let currentSlide = 0;
+
+  function moveSlide(direction) {
+    const slides = document.querySelectorAll('.item-new');
+    const totalSlides = slides.length;
+
+    // Update the current slide index
+    currentSlide += direction;
+
+    // Wrap around if the slide index goes out of bounds
+    if (currentSlide < 0) {
+        currentSlide = totalSlides - 1;
+    } else if (currentSlide >= totalSlides) {
+        currentSlide = 0;
+    }
+
+    // Move the slider to the correct position
+    const slider = document.querySelector('.slider');
+    const slideWidth = slides[0].clientWidth;
+    slider.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+}
+
+    </script>
+
+
+
 
 
 </body>

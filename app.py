@@ -194,6 +194,48 @@ def EDIT_USER():
         connection.close()
 
     return render_template('index.html')
+ 
+
+@app.route('/add_book', methods=['POST'])
+def add_book():
+    
+
+    book_name = request.form['book-title']  
+    book_author = request.form['book-author']
+    book_editorial = request.form['book-editorial']
+    book_stock = request.form['book-stock']
+    book_price = request.form['book-price']
+   
+        
+    connection = get_db_connection()
+    with connection.cursor() as cursor:
+        cursor.execute('INSERT INTO Libros (nombre_libro, autor, editorial, stock) VALUES (%s,%s,%s,%s)',(book_name, book_author, book_editorial, book_stock))
+
+        #get id_libro to insert the price
+        cursor.execute('SELECT id_libro From Libros')
+        value = cursor.fetchall()
+        print("value, indices de los libros: ",value)
+        book_index = value[0]["id_libro"] # guardamos el ultimo indice ingresado
+        print("indices libros:",book_index)
+        cursor.execute('INSERT INTO Costos (id_libro, precio) VALUES (%s,%s)',(book_index, book_price))
+
+        #get id_precio to insert it in Libros
+        cursor.execute('SELECT id_precio From Costos')
+        value = cursor.fetchall()
+        print("value, indices de los precios", value)
+        price_index = value[-1]["id_precio"] 
+        print("indices precios: ",price_index)
+        cursor.execute("""UPDATE  Libros SET id_precio=%s WHERE id_libro=%s""",(price_index,book_index))
+
+        connection.commit()  # Commit changes to the database
+        connection.close()
+       
+    return render_template('index_admin.html')
+
+
+
+
+
 
 
 

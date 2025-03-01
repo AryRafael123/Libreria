@@ -123,3 +123,22 @@ footer {
     color: white;
     margin-top: 2rem;
 }
+
+
+.catalog-items .item{
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.list-elements{
+    margin-top: 30px;
+}
+
+.element{
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}

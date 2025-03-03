@@ -118,25 +118,65 @@
     </section>
 
     <section id="catalog" class="section">
-        <h2>Our Catalog</h2>
-        <div class="catalog-items">
-            <div class="item">
-                <h3>Book Title 1</h3>
-                <p>Description of the book.</p>
-                <button>Buy Now</button>
-            </div>
-            <div class="item">
-                <h3>Book Title 2</h3>
-                <p>Description of the book.</p>
-                <button>Buy Now</button>
-            </div>
-            <div class="item">
-                <h3>Book Title 3</h3>
-                <p>Description of the book.</p>
-                <button>Buy Now</button>
-            </div>
-        </div>
-    </section>
+      <h2>New releases</h2>
+      <div class="catalog-items">
+          <!--<div class="item">
+              <h3>Book Title 1</h3>
+              <p>Description of the book.</p>
+              <button>Edit</button>
+              <button>Delete</button>
+          </div>
+          <div class="item">
+              <h3>Book Title 2</h3>
+              <p>Description of the book.</p>
+              <button>Edit</button>
+              <button>Delete</button>
+          </div>
+          <div class="item">
+              <h3>Book Title 3</h3>
+              <p>Description of the book.</p>
+              <button>Edit</button>
+              <button>Delete</button>
+          </div>-->
+          {% set ns = namespace(contador=0) %}
+          {% for row in data %}
+          {% set ns.contador = ns.contador + 1 %}
+          <div class="item position-relative">
+              {% if ns.contador |int < 5 %}
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-secondary">Nuevo <span class="visually-hidden">unread messages</span></span>
+              {% endif %}
+              <h3>{{row['nombre_libro']}}</h3>
+              <p>{{row['autor']}}</p>
+              <button>Buy now</button>
+          </div>
+          {% endfor %}
+      </div>
+  </section>
+
+
+    <section id="catalog" class="section">
+      <h2>Our Catalog</h2>
+      <div class="catalog-items">
+          <div class="item">
+              <h3>Book Title 1</h3>
+              <p>Description of the book.</p>
+              <button>Buy Now</button>
+          </div>
+          <div class="item">
+              <h3>Book Title 2</h3>
+              <p>Description of the book.</p>
+              <button>Buy Now</button>
+          </div>
+          <div class="item">
+              <h3>Book Title 3</h3>
+              <p>Description of the book.</p>
+              <button>Buy Now</button>
+          </div>
+      </div>
+  </section>
+
+
+
 
     <section id="about" class="section">
         <h2>About Us</h2>

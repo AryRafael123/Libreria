@@ -16,11 +16,24 @@ def get_db_connection():
         host='127.0.0.1',
         user='root',
         password='mysqlpassword123',
-        db='Librería',
+        db='libreria',
         cursorclass=pymysql.cursors.DictCursor  # To get results as dictionaries
     )
     return connection
 
+#Función para mostrar la vista Admin/Usuario
+def view_index(admin):
+    connection = get_db_connection()
+    with connection.cursor() as cursor:
+        cursor.execute('SELECT * FROM libros ORDER by id_libro DESC')
+        value = cursor.fetchall()
+        connection.close()
+    
+    if admin == True:
+        #return url_for('/admin')
+        return render_template('index_admin.html', data=value)
+    else:
+        return render_template('index_user.html', data=value)
 
 
 @app.route('/')
@@ -42,10 +55,10 @@ def index():
             if value[x]["correo"] == session["correo"]:
                 if value[x]["tipo_usuario"] == 1: #we know the index user of the session
                     #admin user
-                    return render_template('index_admin.html')
+                    return view_index(True)
                 else:
                     #normal user
-                    return render_template('index_user.html')
+                    return view_index(False)
                
 
 
@@ -94,16 +107,18 @@ def add_user():
 
     if existe == True:
         if admin == True:
-            return render_template('index_admin.html')
+            #return url_for('/admin')
+            return view_index(admin)
         else:
-            return render_template('index_user.html')
+            return view_index(admin)
+            #return render_template('index_user.html')
     else:
         return render_template('index.html')
         
 
 
 
-@app.route('/template_sign_up',methods=['POST'])
+@app.route('/template_sign_up')
 def SIGN_UP2():
     return render_template('add_user.html')
 
@@ -196,6 +211,41 @@ def EDIT_USER():
     return render_template('index.html')
 
 
+
+@app.route('/add_book', methods=['POST'])
+def ADD_BOOK():
+    
+# This is the form data that Flask receives
+    name_book = request.form['book-title']  # Flask looks for the 'username' key
+    autor = request.form['book-autor']
+    editorial = request.form['book-editorial']
+    stock = request.form['book-stock']
+    price = request.form['book-price']
+
+    # Insert the new user into the database
+    connection = get_db_connection()
+    with connection.cursor() as cursor:
+        cursor.execute('INSERT INTO Libros (nombre_libro, autor, editorial, stock) VALUES (%s,%s,%s,%s)',(name_book, autor, editorial, stock))
+        cursor.execute('SELECT id_libro FROM Libros')
+        value = cursor.fetchone() 
+        x = value["id_libro"]
+        x = int(x)
+        print("x = ",x)
+        cursor.execute('INSERT INTO Costos (precio,id_libro) VALUES (%s,%s)',(price,x))
+        cursor.execute('SELECT id_precio FROM Costos ORDER by id_precio DESC LIMIT 1')
+        value1 = cursor.fetchone() 
+        y = value1["id_precio"]
+        y = int(y)
+        print("x = ",y)
+        cursor.execute ("""UPDATE Libros SET id_precio = %s WHERE id_libro=%s""", (y, x))
+        connection.commit()  # Commit changes to the database
+    connection.close()
+
+    return view_index(True)
+
+#@app.route('/admin')
+#def prueba():
+#    return view_index_admin()
 
 if __name__ == '__main__':
     app.run(debug=True)

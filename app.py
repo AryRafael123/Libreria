@@ -8,6 +8,22 @@ from config import Config
 
 app = Flask(__name__)
 
+
+
+# Configurations to add a image to a book
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
+app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
+
+# Helper function to check allowed file extensions
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+
+
+
+
+
 app.secret_key = binascii.hexlify(os.urandom(24)).decode() # Necesario para usar sesiones
 
 #MySQL connection settings
@@ -127,7 +143,7 @@ def SIGN_UP2():
 @app.route('/sign_up', methods=['POST'])
 def ADD_USER2():
 
-# This is the form data that Flask receives
+    #This is the form data that Flask receives
     name = request.form['name']  # Flask looks for the 'username' key
     last_name = request.form['last_name']
     user_name = request.form['user_name']
@@ -160,7 +176,7 @@ def LOG_OUT():
 @app.route('/add_user', methods=['POST'])
 def ADD_USER():
 
-# This is the form data that Flask receives
+    # This is the form data that Flask receives
     name = request.form['name']  # Flask looks for the 'username' key
     last_name = request.form['last_name']
     user_name = request.form['user_name']
@@ -215,17 +231,29 @@ def EDIT_USER():
 @app.route('/add_book', methods=['POST'])
 def ADD_BOOK():
     
-# This is the form data that Flask receives
-    name_book = request.form['book-title']  # Flask looks for the 'username' key
+#CODE TO ADD A IMAGE TO A BOOK
+    image = request.files.get('image')
+    print("ARRIBA LAS CHIVAS")
+    print ("image: ",image)
+    #save the image if is allowed
+    if image and allowed_file(image.filename):
+        filename = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
+        image.save(filename)
+    print("filename = ",filename)
+
+
+# CODE TO ADD A BOOK
+    name_book = request.form['book-title']  
     autor = request.form['book-autor']
     editorial = request.form['book-editorial']
     stock = request.form['book-stock']
     price = request.form['book-price']
+    
 
     # Insert the new user into the database
     connection = get_db_connection()
     with connection.cursor() as cursor:
-        cursor.execute('INSERT INTO Libros (nombre_libro, autor, editorial, stock) VALUES (%s,%s,%s,%s)',(name_book, autor, editorial, stock))
+        cursor.execute('INSERT INTO Libros (nombre_libro, autor, editorial, stock, imagen) VALUES (%s,%s,%s,%s,%s)',(name_book, autor, editorial, stock,filename))
         cursor.execute('SELECT id_libro FROM Libros')
         value = cursor.fetchone() 
         x = value["id_libro"]

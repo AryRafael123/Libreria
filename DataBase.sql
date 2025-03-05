@@ -1,6 +1,6 @@
-CREATE DATABASE Librería;
+CREATE DATABASE libreria;
 
-USE Librería;
+USE Libreria;
 
 CREATE TABLE Usuarios (
 			id_usuario INT AUTO_INCREMENT PRIMARY KEY,
@@ -84,3 +84,6 @@ REFERENCES Libros (id_libro);
 
 ALTER TABLE Costos
 ADD COLUMN precio DOUBLE;
+
+ALTER TABLE Libros
+ADD COLUMN imagen VARCHAR(50);

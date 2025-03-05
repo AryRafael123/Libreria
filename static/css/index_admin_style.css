@@ -116,6 +116,19 @@ form button:hover {
     background-color: #218838;
 }
 
+.item img {
+    max-width: 100px;
+    height: auto;
+    margin-right: 15px;
+  }
+  
+  #item-image{
+    max-width: 100px;
+    height: auto;
+    margin-right: 15px;
+  }
+  
+
 footer {
     text-align: center;
     padding: 1rem;

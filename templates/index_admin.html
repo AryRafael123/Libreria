@@ -59,24 +59,6 @@
     <section id="catalog" class="section">
         <h2>Manage Catalog</h2>
         <div class="catalog-items">
-            <!--<div class="item">
-                <h3>Book Title 1</h3>
-                <p>Description of the book.</p>
-                <button>Edit</button>
-                <button>Delete</button>
-            </div>
-            <div class="item">
-                <h3>Book Title 2</h3>
-                <p>Description of the book.</p>
-                <button>Edit</button>
-                <button>Delete</button>
-            </div>
-            <div class="item">
-                <h3>Book Title 3</h3>
-                <p>Description of the book.</p>
-                <button>Edit</button>
-                <button>Delete</button>
-            </div>-->
             {% set ns = namespace(contador=0) %}
             {% for row in data %}
             {% set ns.contador = ns.contador + 1 %}
@@ -87,8 +69,16 @@
                 <h3>{{row['nombre_libro']}}</h3>
                 <p>{{row['autor']}}</p>
                 <img id="item-image" src="{{row['imagen']}}" alt="">
-                <button>Edit</button>
-                <button>Delete</button>
+
+                <form action="/edite_book" method="post" >
+                    <button type="submit" >Edit</button>
+                </form>
+           
+                <form action="/delete_book" method="post">
+                    <input type="hidden" name="id_libro" value="{{ row['id_libro'] }}">
+                    <button  type="submit" >Delete</button>
+                </form>         
+
             </div>
             {% endfor %}
         </div>
@@ -96,7 +86,7 @@
 
     <section id="add-book" class="section">
         <h2>Add New Book</h2>
-        <form action="/add_book" method="POST" enctype="multipart/form-data">
+        <form class="form-book" action="/add_book" method="POST" enctype="multipart/form-data">
             <label for="book-title">Book Title:</label>
             <input type="text" id="book-title" name="book-title" required>
 
@@ -105,6 +95,9 @@
 
             <label for="book-editorial">Editorial:</label>
             <input type="text"  id="book-editorial" name="book-editorial" required>
+
+            <label for="book-editorial">Description:</label>
+            <input type="text"  id="book-description" name="book-description" required>
 
             <label for="book-stock">Stock:</label>
             <input type="number" id="book-stock" name="book-stock" required>
@@ -134,8 +127,23 @@
             toastBootstrap.show()
         })
         }
+    </script>
+    <script>
+         document.getElementById('delete-book').addEventListener('click', function() {
+        fetch('/delete_book', {
+            method: 'POST',  // or POST if you want to send a POST request
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data); // You can do something with the response, e.g., display it
+            // Optionally, you can redirect the user after the request:
+            window.location.href = '/my_route'; // Redirects the user to the new route
+        })
+        .catch(error => console.error('Error:', error));
+    });
 
     </script>
+
 
 </body>
 </html>

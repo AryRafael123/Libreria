@@ -71,7 +71,14 @@ h2 {
     width: 30%;
 }
 
-.catalog-items .item button {
+.catalog-items .item .form-buttons{
+    display: flex;
+    height: auto;
+    
+}
+
+.catalog-items .item form button {
+    width: 20%;
     background-color: #007bff;
     color: white;
     border: none;
@@ -85,7 +92,7 @@ h2 {
     background-color: #0056b3;
 }
 
-form {
+.form-book {
     display: flex;
     flex-direction: column;
     width: 50%;

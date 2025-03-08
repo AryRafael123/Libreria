@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+      <section class="book-details">
+            <div class="book-container">
+              
+
+                <div class="book-image">
+                    <img src="{{ data.imagen }}"  alt="Book Cover">
+                </div>
+
+                <div class="book-info">
+                <h2>{{ data.nombre_libro }}</h2>    
+                <h3>Author: {{ data.autor }} </h3>
+                <h3>Editorial: {{ data.editorial }}</h3>
+                <h4>Available: {{ data.stock }} </h4>
+                  <p><strong>Price: $</strong> {{ data2.precio }} </p>
+                  <p><strong>Description:</strong></p>
+                  <p>{{ data.descripcion }}</p>
+                  <button class="add-to-cart">Add to Cart</button>
+                  <button class="buy-now">Buy Now</button>
+
+                </div>
+                  
+              
+            </div>
+        </section>
+
+{% endblock %}

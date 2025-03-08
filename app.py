@@ -5,9 +5,7 @@ import os
 import binascii
 from config import Config
 
-
 app = Flask(__name__)
-
 
 
 # Configurations to add a image to a book
@@ -15,16 +13,14 @@ app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 
+
 # Helper function to check allowed file extensions
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 
-
-
-
-
 app.secret_key = binascii.hexlify(os.urandom(24)).decode() # Necesario para usar sesiones
+
 
 #MySQL connection settings
 def get_db_connection():
@@ -82,22 +78,22 @@ def index():
 @app.route('/sign_in', methods=['POST'])
 def add_user():
 
-
     mail = request.form['mail']
     password = request.form['password']
 
-    
     # Insert the new user into the database
     connection = get_db_connection()
     with connection.cursor() as cursor:
         cursor.execute('SELECT tipo_usuario, correo, contraseña FROM Usuarios')
         value = cursor.fetchall()
         connection.close()
-        
+    
+
     sesion = False
     existe = False
-    admin = False
-    
+    admin = False    
+
+
     for x in range(0,len(value)):
         if value[x]["contraseña"] == password and value[x]["correo"] == mail:
             #el usuario existe
@@ -113,13 +109,11 @@ def add_user():
         else:
             print("")
             
-    
     print("existe: ",existe)
     print("administrador: ",admin)
     print("correo",mail)
     print("sesion: ",session)
     print("secret key: ", app.secret_key)
-
 
     if existe == True:
         if admin == True:
@@ -130,14 +124,11 @@ def add_user():
             #return render_template('index_user.html')
     else:
         return render_template('index.html')
-        
-
 
 
 @app.route('/template_sign_up')
 def SIGN_UP2():
     return render_template('add_user.html')
-
 
 
 @app.route('/sign_up', methods=['POST'])
@@ -160,9 +151,6 @@ def ADD_USER2():
     connection.close()
 
     return render_template('index.html')
-
-
-
 
 @app.route('/log_out')
 def LOG_OUT():
@@ -195,14 +183,11 @@ def ADD_USER():
     return render_template('index.html')
 
 
-
 #This action takes to the template of add user (edit user)
 @app.route('/template_edit_user')
 def template_edit_user():
 
     return render_template('edit_user.html')
-
-
 
 @app.route('/edit_user', methods=['POST'])
 def EDIT_USER():
@@ -227,6 +212,20 @@ def EDIT_USER():
     return render_template('index.html')
 
 
+@app.route('/delete_book', methods=['POST'])
+def delete_book():
+
+    INDICE = int(request.form['id_libro'])
+
+    #print("ID LIBRO ES  :",IDlibro, "Y ES DE TIPO",type(IDlibro) )
+    connection = get_db_connection()
+    with connection.cursor() as cursor:
+        cursor.execute("""DELETE FROM Libros WHERE id_libro = %s  """, (INDICE))
+        connection.commit()
+        connection.close()
+
+    return view_index(True)
+
 
 @app.route('/add_book', methods=['POST'])
 def ADD_BOOK():
@@ -241,19 +240,18 @@ def ADD_BOOK():
         image.save(filename)
     print("filename = ",filename)
 
-
 # CODE TO ADD A BOOK
     name_book = request.form['book-title']  
     autor = request.form['book-autor']
     editorial = request.form['book-editorial']
     stock = request.form['book-stock']
     price = request.form['book-price']
-    
+    description = request.form['book-description']
 
     # Insert the new user into the database
     connection = get_db_connection()
     with connection.cursor() as cursor:
-        cursor.execute('INSERT INTO Libros (nombre_libro, autor, editorial, stock, imagen) VALUES (%s,%s,%s,%s,%s)',(name_book, autor, editorial, stock,filename))
+        cursor.execute('INSERT INTO Libros (nombre_libro, autor, editorial, stock, imagen, descripcion) VALUES (%s,%s,%s,%s,%s,%s)',(name_book, autor, editorial, stock,filename, description))
         cursor.execute('SELECT id_libro FROM Libros')
         value = cursor.fetchone() 
         x = value["id_libro"]
@@ -270,6 +268,26 @@ def ADD_BOOK():
     connection.close()
 
     return view_index(True)
+
+
+
+@app.route('/book_details', methods=['POST'])
+def book_details():
+
+    INDICE = int(request.form['id_libro'])
+    connection = get_db_connection()
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM Libros WHERE id_libro = %s  """, (INDICE))
+        value = cursor.fetchone()
+        cursor.execute("""SELECT * FROM Costos WHERE id_libro = %s  """, (INDICE))
+        value2 = cursor.fetchone()
+    connection.close()
+
+    return render_template('book_details_template.html', data=value, data2=value2)
+
+
+
+
 
 #@app.route('/admin')
 #def prueba():

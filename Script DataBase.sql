@@ -1,4 +1,5 @@
 SELECT * FROM Usuarios;
+SELECT * FROM Libros;
 
 Drop database Librería;
 

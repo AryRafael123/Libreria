@@ -73,8 +73,6 @@ def index():
                     return view_index(False)
                
 
-
-
 @app.route('/sign_in', methods=['POST'])
 def add_user():
 
@@ -283,11 +281,55 @@ def book_details():
         value2 = cursor.fetchone()
     connection.close()
 
-    return render_template('book_details_template.html', data=value, data2=value2)
+    return render_template('book_details_template.html', data=value, data2=value2, Indice = INDICE)
 
 
+@app.route('/buy_book', methods=['POST'])
+def buy_book():
+
+    INDICE = int(request.form['id_libro'])
+
+    connection = get_db_connection()
+    with connection.cursor() as cursor:
+        #Substrac 1 from libros stock
+        cursor.execute("""SELECT stock FROM Libros WHERE id_libro = %s  """, (INDICE))
+        value = cursor.fetchone()
+        new_stock = value['stock'] - 1
+        cursor.execute ("""UPDATE Libros SET stock = %s WHERE id_libro=%s""", (new_stock, INDICE))
+
+        print("VALUE = ",value)
+
+        #add a record in Compras table
+        #first get user id
+        user_acount = session.get('correo')
+        
+        cursor.execute("""SELECT id_usuario FROM Usuarios WHERE correo = %s  """, (user_acount))
+        value = cursor.fetchone()
+        userID = value.get('id_usuario')
+        cursor.execute("""SELECT precio FROM Costos WHERE id_libro = %s  """, (INDICE))
+        value = cursor.fetchone()
+        bookprice = value.get('precio')
+
+        cursor.execute('INSERT INTO Compras (total, id_usuario, id_libro) VALUES (%s,%s,%s)',(bookprice ,userID, INDICE))
+
+        #add one purchase to the user
+        cursor.execute("""SELECT libros_comprados FROM Usuarios WHERE correo = %s  """, (user_acount))
+        value = cursor.fetchone()
+
+        if value.get('libros_comprados') == None:
+            x = 1
+            cursor.execute ("""UPDATE Usuarios SET libros_comprados = %s WHERE id_usuario=%s""", (x, userID))
+        else:
+            x = int(value.get('libros_comprados'))
+            x += 1
+            cursor.execute ("""UPDATE Usuarios SET libros_comprados = %s WHERE id_usuario=%s""", (x, userID))
 
 
+        connection.commit()  # Commit changes to the database
+    connection.close()
+
+    return view_index(False)
+    
 
 #@app.route('/admin')
 #def prueba():

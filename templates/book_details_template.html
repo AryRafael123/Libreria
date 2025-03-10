@@ -19,12 +19,41 @@
                   <p><strong>Description:</strong></p>
                   <p>{{ data.descripcion }}</p>
                   <button class="add-to-cart">Add to Cart</button>
-                  <button class="buy-now">Buy Now</button>
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" >Buy Now</button>
 
                 </div>
                   
-              
+              <!-- button settings-->
+                                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">{{ data.nombre_libro }} </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>$</strong>{{ data2.precio }} </p>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                        <form action="buy_book" method="post">
+                            <input type="hidden" name="id_libro" value="{{Indice}}">
+                            <button type="submit" class="btn btn-primary">Purchase</button>
+                        </form>
+                        
+
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+
             </div>
         </section>
 
 {% endblock %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+       

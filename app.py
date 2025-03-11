@@ -330,6 +330,45 @@ def buy_book():
 
     return view_index(False)
     
+@app.route('/template_purchases')
+def template_purchases():
+
+    
+    connection = get_db_connection()
+    with connection.cursor() as cursor:  
+        #get user id
+        user_acount = session.get('correo')  
+        cursor.execute("""SELECT id_usuario FROM Usuarios WHERE correo = %s  """, (user_acount))
+        value = cursor.fetchone()
+        userID = value.get('id_usuario')
+
+        #lets get all purchases from the data base 
+        cursor.execute("""SELECT id_libro FROM Compras WHERE id_usuario = %s  """, (userID))
+        values = cursor.fetchall()
+        print('VALUES = ',values) # VALUES =  [{'id_libro': x}, {'id_libro': y}, {'id_libro':z}]
+
+
+        indices =[]
+        for x in range(0,len(values)): 
+            indices.append(int(values[x]['id_libro']))  # indices = [x,y]
+    
+
+        print("LISTA INDICESSSSS:  ",indices, "tipo: ",type(indices))
+
+        books = []
+        for x in range(0,len(indices)):
+            cursor.execute("""SELECT * FROM Libros WHERE id_libro = %s  """, (indices[x]))
+            values = cursor.fetchall()
+            books.append(values) # books = [ [{}] , [{}]  ]
+
+        rango = len(books)
+
+        cursor.execute("""SELECT * FROM Libros WHERE id_libro = %s  """, (userID))
+
+    connection.close()
+    
+    return render_template('template_purchases.html', BOOKS = books, rango = rango) 
+
 
 #@app.route('/admin')
 #def prueba():

@@ -61,6 +61,8 @@ h2 {
 .catalog-items {
     display: flex;
     gap: 20px;
+    margin: 2rem 0;
+   
 }
 
 .catalog-items .item {

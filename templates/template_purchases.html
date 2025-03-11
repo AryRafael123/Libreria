@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library Shopping</title>
-    <link rel="stylesheet" href="../static/css/index_user_style.css">
+    <link rel="stylesheet" href="../static/css/template_book_purchases_style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
@@ -56,7 +56,7 @@
                             </li>
 
                             <li class="nav-item">
-                              <a class="nav-link" href="{{ url_for('template_purchases') }}">Purchases</a>
+                              <a class="nav-link" href="#">Purchases</a>
                             </li>
 
                             <li class="nav-item">
@@ -113,74 +113,90 @@
 
 
     <section id="home" class="section">
-        <h2>Welcome to Library Shopping</h2>
+        <h2>Review your previous purchases</h2>
         <p>Your one-stop destination for buying books and educational resources. Find the best books on every subject!</p>
     </section>
 
+
+
     <section id="catalog" class="section">
-      <h2>New releases</h2>
-      <div class="catalog-items">
-          <!--<div class="item">
-              <h3>Book Title 1</h3>
-              <p>Description of the book.</p>
-              <button>Edit</button>
-              <button>Delete</button>
-          </div>
-          <div class="item">
-              <h3>Book Title 2</h3>
-              <p>Description of the book.</p>
-              <button>Edit</button>
-              <button>Delete</button>
-          </div>
-          <div class="item">
-              <h3>Book Title 3</h3>
-              <p>Description of the book.</p>
-              <button>Edit</button>
-              <button>Delete</button>
-          </div>-->
-          {% set ns = namespace(contador=0) %}
-          {% for row in data %}
-          {% set ns.contador = ns.contador + 1 %}
-          <div class="item position-relative">
-              {% if ns.contador |int < 5 %}
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-secondary">Nuevo <span class="visually-hidden">unread messages</span></span>
-              {% endif %}
-              <h3>{{row['nombre_libro']}}</h3>
-              <p>{{row['autor']}}</p>
-              <img id="item-image" src="{{row['imagen']}}" alt="">
-              
-                <form action="book_details" method="post">
-                  <input type="hidden" name="id_libro" value="{{ row['id_libro'] }}">
-                  <button type="submit" >Buy now</button>
-                </form>
+          <h2>Purchases</h2>
+
+              {% for x in range(0,rango) %}
+                <section class="section">
+                        <div class="catalog-items">
+                          <div class="item-position-relative">
+                              <!--book-->
+                              
+                                <h3>{{BOOKS[x][0]['nombre_libro'] }}</h3>
+                                <p>{{BOOKS[x][0]['autor']}}</p>
+                                <img id="item-image" src="{{ BOOKS[x][0]['imagen'] }}" alt="">
+                              
+                                <!--button-->
+                          </div>
+                          <div>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" >Display</button>
+                                  
+                          </div>
+
+
+
+                          </div>
+
+                        </div>
+                  </section>
+                {% endfor %} 
+
                 
+               
 
-          </div>
-          {% endfor %}
-      </div>
-  </section>
+                
+                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel"> Message </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
 
 
-    <section id="catalog" class="section">
-      <h2>Our Catalog</h2>
-      <div class="catalog-items">
-          <div class="item">
-              <h3>Book Title 1</h3>
-              <p>Description of the book.</p>
-              <button>Buy Now</button>
-          </div>
-          <div class="item">
-              <h3>Book Title 2</h3>
-              <p>Description of the book.</p>
-              <button>Buy Now</button>
-          </div>
-          <div class="item">
-              <h3>Book Title 3</h3>
-              <p>Description of the book.</p>
-              <button>Buy Now</button>
-          </div>
-      </div>
-  </section>
+                          <h2 class="fs-5">Book delivered</h2>
+                          <p>Your pound arrived on January 17 at 2:05 p.m.</p>
+                          <hr>
+                          <h2 class="fs-5">Would you like to rate your book?</h2>
+                          <p></p>
+
+
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                        <form action="buy_book" method="post">
+                            <input type="hidden" name="id_libro" value="{{Indice}}">
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </form>
+                        
+
+                        </div>
+                    </div>
+                    </div>
+              </div>
+
+
+
+
+
+    </section>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -206,20 +222,9 @@
         <p>&copy; 2025 Library Shopping. All rights reserved.</p>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     
     
-    <script >
-        const toastTrigger = document.getElementById('liveToastBtn')
-        const toastLiveExample = document.getElementById('liveToast')
-
-        if (toastTrigger) {
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-        toastTrigger.addEventListener('click', () => {
-            toastBootstrap.show()
-        })
-        }
-    </script>
 
 
 </body>

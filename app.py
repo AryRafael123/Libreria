@@ -267,8 +267,6 @@ def ADD_BOOK():
 
     return view_index(True)
 
-
-
 @app.route('/book_details', methods=['POST'])
 def book_details():
 
@@ -332,8 +330,6 @@ def buy_book():
     
 @app.route('/template_purchases')
 def template_purchases():
-
-    
     connection = get_db_connection()
     with connection.cursor() as cursor:  
         #get user id
@@ -347,12 +343,10 @@ def template_purchases():
         values = cursor.fetchall()
         print('VALUES = ',values) # VALUES =  [{'id_libro': x}, {'id_libro': y}, {'id_libro':z}]
 
-
         indices =[]
         for x in range(0,len(values)): 
             indices.append(int(values[x]['id_libro']))  # indices = [x,y]
     
-
         print("LISTA INDICESSSSS:  ",indices, "tipo: ",type(indices))
 
         books = []
@@ -368,6 +362,31 @@ def template_purchases():
     connection.close()
     
     return render_template('template_purchases.html', BOOKS = books, rango = rango) 
+
+
+
+@app.route('/book_rating', methods=['POST'])
+def book_rating():
+    INDICE = int(request.form['id_libro'])
+    rating = request.form['rating']
+    
+    connection = get_db_connection()
+    with connection.cursor() as cursor:  
+        #get user id
+        user_acount = session.get('correo')  
+        cursor.execute("""SELECT id_usuario FROM Usuarios WHERE correo = %s  """, (user_acount))
+        value = cursor.fetchone()
+        userID = value.get('id_usuario')
+
+        cursor.execute('INSERT INTO Opiniones (estrellas, id_libro, id_usuario) VALUES (%s,%s,%s)',(rating ,INDICE, userID))
+        connection.commit()  # Commit changes to the database
+    connection.close()
+
+    return template_purchases()
+
+
+
+
 
 
 #@app.route('/admin')

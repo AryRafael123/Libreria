@@ -27,7 +27,7 @@ def get_db_connection():
     connection = pymysql.connect(
         host='127.0.0.1',
         user='root',
-        password='mysqlpassword123',
+        password='root',
         db='libreria',
         cursorclass=pymysql.cursors.DictCursor  # To get results as dictionaries
     )
@@ -277,9 +277,27 @@ def book_details():
         value = cursor.fetchone()
         cursor.execute("""SELECT * FROM Costos WHERE id_libro = %s  """, (INDICE))
         value2 = cursor.fetchone()
+
+        cursor.execute("""SELECT * FROM Opiniones WHERE id_libro = %s  """, (INDICE))
+        value4 = cursor.fetchone()
+
+
+        #rating
+        cursor.execute("""SELECT * FROM Opiniones WHERE id_libro = %s  """, (INDICE))
+        value3 = cursor.fetchall() # VALUE =    [{'id_opinion': 1, 'estrellas': 4, 'id_libro': 1, 'id_usuario': 2}, {'id_opinion': 3, 'estrellas': 1, 'id_libro': 1, 'id_usuario': 2}, {'id_opinion': 4, 'estrellas': 1, 'id_libro': 1, 'id_usuario': 2}]
+    
+        if len(value3) >1:
+            total = 0
+            for x in range(0,len(value3)):
+                total += value3[x]['estrellas']
+            TOTAL = total / len(value3)
+        else:
+            total =0
+            TOTAL = total
+
     connection.close()
 
-    return render_template('book_details_template.html', data=value, data2=value2, Indice = INDICE)
+    return render_template('book_details_template.html', data=value, data2=value2, Indice = INDICE, total = TOTAL, data3 = value4 )
 
 
 @app.route('/buy_book', methods=['POST'])
@@ -354,12 +372,9 @@ def template_purchases():
             cursor.execute("""SELECT * FROM Libros WHERE id_libro = %s  """, (indices[x]))
             values = cursor.fetchall()
             books.append(values) # books = [ [{}] , [{}]  ]
-
         rango = len(books)
-
         cursor.execute("""SELECT * FROM Libros WHERE id_libro = %s  """, (userID))
 
-    connection.close()
     
     return render_template('template_purchases.html', BOOKS = books, rango = rango) 
 
@@ -369,6 +384,7 @@ def template_purchases():
 def book_rating():
     INDICE = int(request.form['id_libro'])
     rating = request.form['rating']
+    comentario = request.form['comment']
     
     connection = get_db_connection()
     with connection.cursor() as cursor:  
@@ -378,9 +394,12 @@ def book_rating():
         value = cursor.fetchone()
         userID = value.get('id_usuario')
 
-        cursor.execute('INSERT INTO Opiniones (estrellas, id_libro, id_usuario) VALUES (%s,%s,%s)',(rating ,INDICE, userID))
+        cursor.execute('INSERT INTO Opiniones (estrellas, id_libro, id_usuario, comentario) VALUES (%s,%s,%s,%s)',(rating ,INDICE, userID, comentario))
+
         connection.commit()  # Commit changes to the database
     connection.close()
+
+
 
     return template_purchases()
 

@@ -44,7 +44,8 @@ CREATE TABLE Estado_libros(
 
 CREATE TABLE Opiniones(
 			id_opinion INT AUTO_INCREMENT PRIMARY KEY,
-            estrellas INT
+            estrellas INT,
+            comentario VARCHAR(50)
 );
 
 SHOW TABLES;

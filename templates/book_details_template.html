@@ -7,17 +7,17 @@
               
 
                 <div class="book-image">
-                    <img src="{{ data.imagen }}"  alt="Book Cover">
+                    <img src="{{ libros.imagen }}"  alt="Book Cover">
                 </div>
 
                 <div class="book-info">
-                <h2>{{ data.nombre_libro }}</h2>    
-                <h3>Author: {{ data.autor }} </h3>
-                <h3>Editorial: {{ data.editorial }}</h3>
-                <h4>Available: {{ data.stock }} </h4>
-                  <p><strong>Price: $</strong> {{ data2.precio }} </p>
+                <h2>{{ libros.nombre_libro }}</h2>    
+                <h3>Author: {{ libros.autor }} </h3>
+                <h3>Editorial: {{ libros.editorial }}</h3>
+                <h4>Available: {{ libros.stock }} </h4>
+                  <p><strong>Price: $</strong> {{ costos.precio }} </p>
                   <p><strong>Description:</strong></p>
-                  <p>{{ data.descripcion }}</p>
+                  <p>{{ libros.descripcion }}</p>
                   <button class="add-to-cart">Add to Cart</button>
                   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" >Buy Now</button>
 
@@ -29,11 +29,11 @@
                     <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">{{ data.nombre_libro }} </h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">{{ libros.nombre_libro }} </h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p><strong>$</strong>{{ data2.precio }} </p>
+                            <p><strong>$</strong>{{ costos.precio }} </p>
                         </div>
                         <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -70,7 +70,8 @@
     <span class="fa fa-star checked"></span>
     <span class="fa fa-star checked"></span>
     <span class="fa fa-star"></span>
-    <p>{{total}} average based on 254 reviews.</p>
+    <p>{{total}} average based on {{views}} reviews.</p>
+    <input type="hidden" value="{{views}}" id="total-views">
     <hr style="border:3px solid #f1f1f1">
 
     <div class="row">
@@ -79,56 +80,74 @@
     </div>
     <div class="middle">
         <div class="bar-container">
-        <div class="bar-5"></div>
+        <div id="bar-5"></div>
         </div>
     </div>
     <div class="side right">
-        <div>150</div>
+        <input type="hidden" value="{{star_5}}" id="star-5">
+        <div>{{star_5}}</div>
     </div>
+
+
+
     <div class="side">
         <div>4 star</div>
     </div>
     <div class="middle">
         <div class="bar-container">
-        <div class="bar-4"></div>
+        <div id="bar-4"></div>
         </div>
     </div>
     <div class="side right">
-        <div>63</div>
+        <input type="hidden" value="{{star_4}}" id="star-4">
+        <div>{{star_4}}</div>
     </div>
+
+
     <div class="side">
         <div>3 star</div>
     </div>
     <div class="middle">
         <div class="bar-container">
-        <div class="bar-3"></div>
+        <div id="bar-3"></div>
         </div>
     </div>
     <div class="side right">
-        <div>15</div>
+        <input type="hidden" value="{{star_3}}" id="star-3">
+        <div>{{star_3}}</div>
     </div>
+
+
+
     <div class="side">
         <div>2 star</div>
     </div>
     <div class="middle">
         <div class="bar-container">
-        <div class="bar-2"></div>
+        <div id="bar-2"></div>
         </div>
     </div>
     <div class="side right">
-        <div>6</div>
+        <input type="hidden" value="{{star_2}}" id="star-2">
+        <div>{{star_2}}</div>
     </div>
+
+
+
     <div class="side">
         <div>1 star</div>
     </div>
     <div class="middle">
         <div class="bar-container">
-        <div class="bar-1"></div>
+        <div id="bar-1"></div>
         </div>
     </div>
     <div class="side right">
-        <div>20</div>
+        <input type="hidden" value="{{star_1}}" id="star-1">
+        <div>{{star_1}}</div>
     </div>
+
+
     </div>
     </section>
 
@@ -140,15 +159,61 @@
 {% endblock %}
 
 {% block comment %}
-<section class="comments">
-<div>
-    <p>comentario: {{data3.comentario}} </p>
-</div>
+    
+    {% for row in opiniones %}
+        <section class="comments">
+        <div>
+            <p><strong>comentario: </strong>{{row}} </p>
+        </div>
 
-</section>
+        </section>
+    {% endfor %}    
 
 {% endblock %}
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-       
+
+
+{% block script %}
+<script>
+
+const total = document.getElementById("total-views").value;
+
+
+const valor5 = document.getElementById("star-5").value;
+const resultado5 =  (valor5*100)/total
+const element5 = document.getElementById("bar-5");
+element5.style.width = resultado5 + "%" // Dynamically change height
+
+
+const valor4 = document.getElementById("star-4").value;
+const resultado4 =  (valor4*100)/total
+const element4 = document.getElementById("bar-4");
+element4.style.width = resultado4 + "%" // Dynamically change height
+
+
+const valor3 = document.getElementById("star-3").value;
+const resultado3 = (valor3*100)/total
+const element3 = document.getElementById("bar-3");
+element3.style.width = resultado3 + "%" // Dynamically change height
+
+
+const valor2 = document.getElementById("star-2").value;
+const resultado2 =  (valor2*100)/total
+const element2 = document.getElementById("bar-2");
+element2.style.width = resultado2 + "%" // Dynamically change height
+
+
+const valor1 = document.getElementById("star-1").value;
+const resultado1 =  (valor1*100)/total
+const element1 = document.getElementById("bar-1");
+element1.style.width = resultado1 + "%" // Dynamically change height
+
+</script>
+    
+
+
+
+{% endblock %}
+

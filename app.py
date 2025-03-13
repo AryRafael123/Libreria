@@ -27,7 +27,7 @@ def get_db_connection():
     connection = pymysql.connect(
         host='127.0.0.1',
         user='root',
-        password='root',
+        password='mysqlpassword123',
         db='libreria',
         cursorclass=pymysql.cursors.DictCursor  # To get results as dictionaries
     )
@@ -267,6 +267,7 @@ def ADD_BOOK():
 
     return view_index(True)
 
+
 @app.route('/book_details', methods=['POST'])
 def book_details():
 
@@ -279,25 +280,54 @@ def book_details():
         value2 = cursor.fetchone()
 
         cursor.execute("""SELECT * FROM Opiniones WHERE id_libro = %s  """, (INDICE))
-        value4 = cursor.fetchone()
+        value4 = cursor.fetchall()
 
+        #we save the comments in a list
+        comentarios = []
+        for x in range(0,len(value4)):
+            comentarios.append(value4[x]['comentario'])
 
+    
         #rating
         cursor.execute("""SELECT * FROM Opiniones WHERE id_libro = %s  """, (INDICE))
-        value3 = cursor.fetchall() # VALUE =    [{'id_opinion': 1, 'estrellas': 4, 'id_libro': 1, 'id_usuario': 2}, {'id_opinion': 3, 'estrellas': 1, 'id_libro': 1, 'id_usuario': 2}, {'id_opinion': 4, 'estrellas': 1, 'id_libro': 1, 'id_usuario': 2}]
+        registros = cursor.fetchall() # VALUE =    [{'id_opinion': 1, 'estrellas': 4, 'id_libro': 1, 'id_usuario': 2}, {'id_opinion': 3, 'estrellas': 1, 'id_libro': 1, 'id_usuario': 2}, {'id_opinion': 4, 'estrellas': 1, 'id_libro': 1, 'id_usuario': 2}]
     
-        if len(value3) >1:
+        #total votes
+        reviews = len(registros)
+
+        if len(registros)>0:
             total = 0
-            for x in range(0,len(value3)):
-                total += value3[x]['estrellas']
-            TOTAL = total / len(value3)
+
+            for x in range(0,len(registros)):
+                total += registros[x]['estrellas']
+            TOTAL = total / len(registros)
         else:
             total =0
             TOTAL = total
 
     connection.close()
 
-    return render_template('book_details_template.html', data=value, data2=value2, Indice = INDICE, total = TOTAL, data3 = value4 )
+    star1 = 0
+    star2 = 0
+    star3 = 0
+    star4 = 0
+    star5 = 0
+
+    for x in range(0,reviews):
+        if registros[x]['estrellas'] == 5:
+            star5 += 1
+        elif registros[x]['estrellas'] == 4:
+            star4 += 1
+        elif registros[x]['estrellas'] == 3:
+            star3 += 1
+        elif registros[x]['estrellas'] == 2:
+            star2 += 1
+        elif registros[x]['estrellas'] == 1:
+            star1 += 1
+
+
+
+    return render_template('book_details_template.html', libros=value, costos=value2, Indice = INDICE, total = TOTAL, opiniones = comentarios , views = reviews, star_1 = star1, star_2 = star2, star_3 = star3, star_4 = star4, star_5 = star5)
 
 
 @app.route('/buy_book', methods=['POST'])
@@ -394,7 +424,23 @@ def book_rating():
         value = cursor.fetchone()
         userID = value.get('id_usuario')
 
-        cursor.execute('INSERT INTO Opiniones (estrellas, id_libro, id_usuario, comentario) VALUES (%s,%s,%s,%s)',(rating ,INDICE, userID, comentario))
+        #evaluate if the user had already voted
+        cursor.execute("""SELECT id_usuario FROM Opiniones WHERE id_libro = %s  """, (INDICE))
+        opinions = cursor.fetchall() # [{'id_usuario':x},{'id_usuario':y}, {'id_usuario':z} ] 
+        print("existe una opinion del usuario actual  ==  ",opinions)
+
+       
+
+        lista = []
+        for x in range(0,len(opinions)):
+            lista.append(opinions[x]['id_usuario'])
+
+        print("LISTA DE LOS IDS DE USUARIOS  == ",lista)
+    
+        if userID in lista: # the user had already voted
+            cursor.execute ("""UPDATE Opiniones SET estrellas = %s, comentario = %s  WHERE id_libro=%s""", (rating, comentario, INDICE))
+        else:
+            cursor.execute('INSERT INTO Opiniones (estrellas, id_libro, id_usuario, comentario) VALUES (%s,%s,%s,%s)',(rating ,INDICE, userID, comentario))
 
         connection.commit()  # Commit changes to the database
     connection.close()

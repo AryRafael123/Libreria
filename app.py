@@ -334,13 +334,15 @@ def book_details():
 def buy_book():
 
     INDICE = int(request.form['id_libro'])
+    amount = int(request.form['NumeroCompras'])
+    
 
     connection = get_db_connection()
     with connection.cursor() as cursor:
         #Substrac 1 from libros stock
         cursor.execute("""SELECT stock FROM Libros WHERE id_libro = %s  """, (INDICE))
         value = cursor.fetchone()
-        new_stock = value['stock'] - 1
+        new_stock = value['stock'] - amount
         cursor.execute ("""UPDATE Libros SET stock = %s WHERE id_libro=%s""", (new_stock, INDICE))
 
         print("VALUE = ",value)
@@ -355,8 +357,9 @@ def buy_book():
         cursor.execute("""SELECT precio FROM Costos WHERE id_libro = %s  """, (INDICE))
         value = cursor.fetchone()
         bookprice = value.get('precio')
+        bookprice = bookprice*amount
 
-        cursor.execute('INSERT INTO Compras (total, id_usuario, id_libro) VALUES (%s,%s,%s)',(bookprice ,userID, INDICE))
+        cursor.execute('INSERT INTO Compras (libros_comprados,total, id_usuario, id_libro) VALUES (%s,%s,%s)',(amount,bookprice ,userID, INDICE))
 
         #add one purchase to the user
         cursor.execute("""SELECT libros_comprados FROM Usuarios WHERE correo = %s  """, (user_acount))
@@ -367,7 +370,7 @@ def buy_book():
             cursor.execute ("""UPDATE Usuarios SET libros_comprados = %s WHERE id_usuario=%s""", (x, userID))
         else:
             x = int(value.get('libros_comprados'))
-            x += 1
+            x += amount
             cursor.execute ("""UPDATE Usuarios SET libros_comprados = %s WHERE id_usuario=%s""", (x, userID))
 
 
@@ -376,6 +379,154 @@ def buy_book():
 
     return view_index(False)
     
+
+
+
+@app.route('/template_add_cart')
+def template_add_cart():
+    #get items from the cart and send them to template_cart.html
+    connection = get_db_connection()
+    with connection.cursor() as cursor:
+
+        #get nombre_libro, autor, imagen, precio 
+        #get id_usuario
+        user_acount = session.get('correo')      
+        cursor.execute("""SELECT id_usuario FROM Usuarios WHERE correo = %s  """, (user_acount))
+        value = cursor.fetchone()
+        userID = value.get('id_usuario')
+
+        cursor.execute("""SELECT id_libro FROM Items WHERE id_usuario = %s  """, (userID))
+        booksIDS = cursor.fetchall() #BOOKSIDS ==  [{'id_libro': 2}, {'id_libro': 1}]
+        print("booksIDS == ",booksIDS)
+        print("LEN = ",len(booksIDS))
+
+        #get prices
+        prices =0
+        for x in range(0,len(booksIDS)):
+            cursor.execute("""SELECT precio FROM Costos WHERE id_libro = %s  """, (booksIDS[x]['id_libro']))
+            books_prices = cursor.fetchall() 
+            prices += books_prices[0]['precio']
+    
+        #save the books in a list to show them later 
+        Libros = []
+        for x in range(0,len(booksIDS)):
+            cursor.execute("""SELECT nombre_libro, autor, imagen FROM Libros WHERE id_libro = %s  """, (booksIDS[x]['id_libro']))
+            books = cursor.fetchall() # [{'nombre_libro': 'El pincipe', 'autor': 'Nicolas Maquiavelo', 'imagen': 'static/uploads\\libro2.jpg'}]
+            Libros.append(books) # Libros = [[{'nombre_libro': 'El pincipe', 'autor': 'Nicolas Maquiavelo', 'imagen': 'static/uploads\\libro2.jpg'}], [{'nombre_libro': 'El capital', 'autor': 'Karl Marx', 'imagen': 'static/uploads\\libro1.jpg'}]]
+        
+
+        rango = len(Libros)
+        #lets defined if there are books or not
+        if len(Libros) > 0:
+            cart = True
+        else:
+            cart = False
+
+        
+
+
+        connection.commit()  # Commit changes to the database
+    connection.close()
+
+    return render_template('template_cart.html',Books = Libros, rango = rango, cart = cart, total_price = prices)
+    
+
+@app.route('/add_cart', methods=['POST'])
+def add_cart():
+    #get id_libro
+    INDICE = int(request.form['id_libro'])
+    amount = int(request.form.get('NumeroCarrito'))
+
+    print("COMPRAS : ",amount)
+
+    connection = get_db_connection()
+    with connection.cursor() as cursor:
+        #get id_usuario
+        user_acount = session.get('correo')      
+        cursor.execute("""SELECT id_usuario FROM Usuarios WHERE correo = %s  """, (user_acount))
+        value = cursor.fetchone()
+        userID = value.get('id_usuario')
+
+        #get id_precio
+        cursor.execute("""SELECT id_precio FROM Costos WHERE id_libro = %s  """, (INDICE))
+        value2 = cursor.fetchone()
+        priceID = value2.get('id_precio')
+
+        #insert into Items
+        cursor.execute('INSERT INTO Items (id_usuario,cantidad,id_libro,id_precio) VALUES (%s,%s,%s,%s)',(userID,amount,INDICE,priceID))
+
+        connection.commit()  # Commit changes to the database
+    connection.close()
+
+    return book_details()
+
+@app.route('/buy_items')
+def buy_items():
+    connection = get_db_connection()
+    with connection.cursor() as cursor:
+
+        #get id_usuario
+        user_acount = session.get('correo')      
+        cursor.execute("""SELECT id_usuario FROM Usuarios WHERE correo = %s  """, (user_acount))
+        value = cursor.fetchone()
+        userID = value.get('id_usuario')
+        #get id_libros
+        cursor.execute("""SELECT id_libro FROM Items WHERE id_usuario = %s  """, (userID))
+        booksIDS = cursor.fetchall() #BOOKSIDS ==  [{'id_libro': 2}, {'id_libro': 1}]
+
+        AmountPerBook = []
+        for x in range(0,len(booksIDS)):
+            #get amount
+            cursor.execute("""SELECT cantidad FROM Items WHERE id_libro = %s  """, (booksIDS[x]['id_libro']))
+            booksAmount = cursor.fetchall() #BOOKSIDS ==  [{'id_libro': 2}, {'id_libro': 1}]
+            AmountPerBook.append(booksAmount) # [[{'cantidad': 2}], [{'cantidad': 3}]]
+
+        #get prices
+        prices = []
+        for x in range(0,len(booksIDS)):
+            cursor.execute("""SELECT precio FROM Costos WHERE id_libro = %s  """, (booksIDS[x]['id_libro']))
+            books_prices = cursor.fetchall() 
+            prices.append(books_prices) # [[{'precio': 500.0}], [{'precio': 800.0}]]
+    
+        #record the purchases
+        for x in range(0,len(booksIDS)):#                                                                                     libros comprados              total a pagar por libro                usuario      id libro
+            cursor.execute('INSERT INTO Compras (libros_comprados, total, id_usuario, id_libro) VALUES (%s,%s,%s,%s)',(AmountPerBook[x][0]['cantidad'],(prices[x][0]['precio'])*(AmountPerBook[x][0]['cantidad']) ,userID, booksIDS[x]['id_libro']))
+
+
+        #add purchases to the user
+        cursor.execute("""SELECT libros_comprados FROM Usuarios WHERE correo = %s  """, (user_acount))
+        value = cursor.fetchone()
+        
+        if value.get('libros_comprados') == None:
+            z = 0
+            for x in range(0,len(booksIDS)):
+                z += AmountPerBook[x][0]['cantidad']
+            cursor.execute ("""UPDATE Usuarios SET libros_comprados = %s WHERE id_usuario=%s""", (z, userID))
+        else:
+            z = int(value.get('libros_comprados'))
+            z += AmountPerBook[x][0]['cantidad']
+            cursor.execute ("""UPDATE Usuarios SET libros_comprados = %s WHERE id_usuario=%s""", (z, userID))
+
+        #delete records from Items
+        for x in range(0,len(booksIDS)):
+            cursor.execute("""DELETE  FROM Items WHERE id_libro = %s  """, (booksIDS[x]['id_libro']))
+
+        #delete books stock --------------------------------------------------------------------------------
+        for x in range(0,len(booksIDS)):
+            cursor.execute("""SELECT stock FROM Libros WHERE id_libro = %s  """, (booksIDS[x]['id_libro']))
+            value = cursor.fetchone()
+            new_stock = value['stock'] - AmountPerBook[x][0]['cantidad']
+            cursor.execute ("""UPDATE Libros SET stock = %s WHERE id_libro=%s""", (new_stock, booksIDS[x]['id_libro']))
+
+
+        connection.commit()  # Commit changes to the database
+    connection.close()
+    
+    return view_index(False)
+    
+
+
+
 @app.route('/template_purchases')
 def template_purchases():
     connection = get_db_connection()

@@ -357,6 +357,22 @@ main {
 }
 
 
+.button-buy-cart button{
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1em;
+}
+
+.button-buy-cart button:hover {
+    background-color: #218838;
+}
+
+.amount{
+padding: 18px;
+}
 
 
 /* Responsive layout - make the columns stack on top of each other instead of next to each other */

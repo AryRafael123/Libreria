@@ -18,13 +18,52 @@
                   <p><strong>Price: $</strong> {{ costos.precio }} </p>
                   <p><strong>Description:</strong></p>
                   <p>{{ libros.descripcion }}</p>
-                  <button class="add-to-cart">Add to Cart</button>
+
+                  <div class="amount">
+                    
+                        <label for="cantidad">amount:</label>
+                        <input type="number" id="cantidad" name="cantidad" min="1" max="{{libros.stock}}" value="1" required> <!-- cantidad-->
+                        <input type="hidden" value = "{{costos.precio}}" id="Precio" > <!-- precio -->
+                                         
+                  </div>
+                  
+                  
+
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-to-cart" >Add to Cart</button>
                   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" >Buy Now</button>
 
                 </div>
                   
               <!-- button settings-->
-                                <!-- Modal -->
+
+                    <!-- Modal add cart-->
+                <div class="modal fade" id="add-to-cart" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">{{ libros.nombre_libro }} </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Total: $<span id="totalPriceCart"> 10</span></p>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                        <form action="add_cart" method="post">
+                            <input type="hidden" name="id_libro" value="{{Indice}}">
+                            <input type="hidden" name="NumeroCarrito" id="NumeroCarrito" value="1">
+                            <button type="submit" class="btn btn-primary">add to cart</button>
+                        </form>
+                        
+
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+
+                                <!-- Modal buy book-->
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                     <div class="modal-content">
@@ -33,13 +72,14 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p><strong>$</strong>{{ costos.precio }} </p>
+                            <p>Total: $<span id="totalPriceBuy"> </span></p>
                         </div>
                         <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 
                         <form action="buy_book" method="post">
                             <input type="hidden" name="id_libro" value="{{Indice}}">
+                            <input type="hidden" name="NumeroCompras" id="NumeroCompras">
                             <button type="submit" class="btn btn-primary">Purchase</button>
                         </form>
                         
@@ -211,7 +251,42 @@ const element1 = document.getElementById("bar-1");
 element1.style.width = resultado1 + "%" // Dynamically change height
 
 </script>
-    
+ 
+<script>
+
+const PricePerBook = document.getElementById('Precio');
+const Price = parseInt(PricePerBook.value, 10)
+
+const amount = document.getElementById('cantidad');
+
+const totalPriceElement = document.getElementById('totalPriceCart');
+const totalPriceElement2 = document.getElementById('totalPriceBuy');
+
+var TotalCarrito = document.getElementById('NumeroCarrito');
+var TotalCompras = document.getElementById('NumeroCompras');
+
+ // Update the total price based on the selected quantity
+ function updateTotalPrice() {
+      const quantity = parseInt(amount.value, 10);
+      const totalPrice = quantity * Price;
+      totalPriceElement.textContent = totalPrice;
+      totalPriceElement2.textContent = totalPrice;
+
+        document.getElementById('NumeroCarrito').value = amount.value;
+        document.getElementById('NumeroCompras').value = amount.value;
+   
+
+    }
+
+
+    // Event listener to update price in real-time
+    amount.addEventListener('input', updateTotalPrice);
+
+    // Initialize total price
+    updateTotalPrice();
+
+
+</script>
 
 
 

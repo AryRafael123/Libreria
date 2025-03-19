@@ -18,7 +18,7 @@ CREATE TABLE Usuarios (
  
 CREATE TABLE Compras(
 			id_compra INT AUTO_INCREMENT PRIMARY KEY,
-			nombre VARCHAR(50),
+			libros_comprados VARCHAR(50),
 			total DOUBLE
 );
 
@@ -46,6 +46,11 @@ CREATE TABLE Opiniones(
 			id_opinion INT AUTO_INCREMENT PRIMARY KEY,
             estrellas INT,
             comentario VARCHAR(50)
+);
+
+CREATE TABLE Items(
+			id_item INT AUTO_INCREMENT PRIMARY KEY,
+            cantidad INT
 );
 
 SHOW TABLES;
@@ -89,7 +94,7 @@ ALTER TABLE Estado_libros
 ADD CONSTRAINT fk_Estadolibros_Libro FOREIGN KEY (id_libro)
 REFERENCES Libros (id_libro);
 
--- new lines ------------------
+
 ALTER TABLE Opiniones 
 ADD COLUMN id_libro INT;
 
@@ -118,6 +123,27 @@ ALTER TABLE Usuarios
 ADD CONSTRAINT fk_Usuarios_Opinion FOREIGN KEY (id_opinion)
 REFERENCES Opiniones (id_opinion);
 
+-- new lines ------------------
+ALTER TABLE Items
+ADD COLUMN id_usuario INT;
+
+ALTER TABLE Items
+ADD CONSTRAINT fk_Items_Usuario FOREIGN KEY (id_usuario)
+REFERENCES Usuarios (id_usuario);
+
+ALTER TABLE Items
+ADD COLUMN id_libro INT;
+
+ALTER TABLE Items
+ADD CONSTRAINT fk_Items_Libro FOREIGN KEY (id_libro)
+REFERENCES Libros (id_libro);
+
+ALTER TABLE Items
+ADD COLUMN id_precio INT;
+
+ALTER TABLE Items
+ADD CONSTRAINT fk_Items_Precio FOREIGN KEY (id_precio)
+REFERENCES Costos (id_precio);
 
 -- end new lines ------------------
 

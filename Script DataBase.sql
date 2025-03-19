@@ -1,13 +1,12 @@
-SELECT * FROM Libros;
-SELECT * FROM Costos;
 SELECT * FROM Usuarios;
+SELECT * FROM Libros;
+SELECT * FROM Compras;
+SELECT * FROM Costos;
 SELECT * FROM Opiniones;
+SELECT * FROM Items;
+
 
 Drop database libreria;
-
-DELETE FROM Costos where id_libro = 1;
-DELETE FROM Libros where id_libro = 1;
-
 
 
 -- usuario administrador

@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+
+
+
+
+
+
+{% block content %}
+<section id="home" class="section">
+  <h2>check what you have in your cart</h2>
+  <p>Your one-stop destination for buying books and educational resources. Find the best books on every subject!</p>
+</section>
+
+<!-- cart no empty-->
+{% if cart == True %}
+
+<!-- buton to buy all the items-->
+<div class="button-buy-cart">
+  <button id="bookID"  value=""   type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#buy-items" >Buy items</button> 
+</div>
+
+<!--modal to confirm-->
+<div class="modal fade" id="buy-items" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+  <div class="modal-content">
+      <div class="modal-header">
+      <h1 class="modal-title fs-5" id="exampleModalLabel"> Message </h1>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h2 class="fs-5">Total price</h2>
+        <hr>
+        <p> <strong> ${{ total_price }}</strong> </p>
+
+        <form action="buy_items">
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="myForm"  type="submit" class="btn btn-primary" >Buy items</button>
+            </div>
+
+        </form>
+      
+
+      </div>
+  </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<!--section to show all the items in the cart-->
+<section id="catalog" class="section">
+    <h2>Cart</h2>
+       
+        {% for x in range(0,rango) %}
+                <section class="section">
+                        <div class="catalog-items">
+                          <div class="item-position-relative">
+                              <!--book-->
+                              
+                                <h3>{{Books[x][0]['nombre_libro'] }}</h3>
+                                <p>{{Books[x][0]['autor']}}</p>
+                             
+                                
+                                <img id="item-image" src="{{ Books[x][0]['imagen'] }}" alt="">
+                              
+                                <!--button-->
+                          </div>
+                          <div>
+                              <button id="bookID"  value="{{Books[x][0]['id_libro']}}"   type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#{{x}}" >Display</button>
+                                      
+                          </div>
+
+                          </div>
+
+                        </div>
+                    
+                  </section>  
+        {% endfor %}
+    <!-- cart empty-->     
+    {%else %}
+
+    <section id="home" class="section">
+      <h2>Your cart looks empty</h2>
+      <p>Add things to your cart to see the items you've added.</p>
+    </section>
+
+       
+  {% endif %}   
+        
+
+{% endblock %}

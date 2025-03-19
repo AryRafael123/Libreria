@@ -4,8 +4,28 @@ import pymysql
 import os
 import binascii
 from config import Config
+import requests
 
 app = Flask(__name__)
+
+
+@app.route('/display_cart', methods=['GET'])
+def display_cart():
+    connection = get_db_connection()
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM Items """)
+        items = cursor.fetchall() 
+        connection.commit()  # Commit changes to the database
+    connection.close()
+
+
+  
+    if items:
+        return jsonify(items)
+    else:
+        return jsonify({"error": "User not found"}), 404
+
+
 
 
 # Configurations to add a image to a book
@@ -17,7 +37,6 @@ app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 # Helper function to check allowed file extensions
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
-
 
 app.secret_key = binascii.hexlify(os.urandom(24)).decode() # Necesario para usar sesiones
 
@@ -511,7 +530,7 @@ def buy_items():
         for x in range(0,len(booksIDS)):
             cursor.execute("""DELETE  FROM Items WHERE id_libro = %s  """, (booksIDS[x]['id_libro']))
 
-        #delete books stock --------------------------------------------------------------------------------
+        #delete books stock 
         for x in range(0,len(booksIDS)):
             cursor.execute("""SELECT stock FROM Libros WHERE id_libro = %s  """, (booksIDS[x]['id_libro']))
             value = cursor.fetchone()

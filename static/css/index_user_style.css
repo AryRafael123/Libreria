@@ -70,7 +70,7 @@ h2 {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     width: 30%;
 }
-
+/*buy now button */
 .catalog-items .item button {
     background-color: #28a745;
     color: white;
@@ -84,11 +84,24 @@ h2 {
 .catalog-items .item button:hover {
     background-color: #218838;
 }
+/*end buy now button*/
 
+.catalog-items .item form button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+/*
 form {
     display: flex;
     flex-direction: column;
 }
+*/
 
 form label {
     margin: 10px 0 5px;

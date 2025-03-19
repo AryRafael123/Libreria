@@ -124,24 +124,6 @@
     <section id="catalog" class="section">
       <h2>New releases</h2>
       <div class="catalog-items">
-          <!--<div class="item">
-              <h3>Book Title 1</h3>
-              <p>Description of the book.</p>
-              <button>Edit</button>
-              <button>Delete</button>
-          </div>
-          <div class="item">
-              <h3>Book Title 2</h3>
-              <p>Description of the book.</p>
-              <button>Edit</button>
-              <button>Delete</button>
-          </div>
-          <div class="item">
-              <h3>Book Title 3</h3>
-              <p>Description of the book.</p>
-              <button>Edit</button>
-              <button>Delete</button>
-          </div>-->
           {% set ns = namespace(contador=0) %}
           {% for row in data %}
           {% set ns.contador = ns.contador + 1 %}
@@ -152,11 +134,14 @@
               <h3>{{row['nombre_libro']}}</h3>
               <p>{{row['autor']}}</p>
               <img id="item-image" src="{{row['imagen']}}" alt="">
-              
+
+              <div>
                 <form action="book_details" method="post">
                   <input type="hidden" name="id_libro" value="{{ row['id_libro'] }}">
                   <button type="submit" >Buy now</button>
                 </form>
+              </div>
+                
                 
 
           </div>

@@ -46,7 +46,7 @@ def get_db_connection():
     connection = pymysql.connect(
         host='127.0.0.1',
         user='root',
-        password='root',
+        password='mysqlpassword123',
         db='libreria',
         cursorclass=pymysql.cursors.DictCursor  # To get results as dictionaries
     )
@@ -57,7 +57,16 @@ def view_index(admin):
     connection = get_db_connection()
     with connection.cursor() as cursor:
         cursor.execute('SELECT * FROM libros ORDER by id_libro DESC')
-        value = cursor.fetchall()
+        values = cursor.fetchall()
+        
+        value = []
+        #save books in a list whose stcok > 0
+        for x in range(0,len(values)):
+            if values[x]['stock'] > 0:
+                value.append(values[x])
+            else:
+                pass
+
         connection.close()
     
     if admin == True:
@@ -358,24 +367,26 @@ def buy_book():
 
     connection = get_db_connection()
     with connection.cursor() as cursor:
-        #Substrac 1 from libros stock
+        #Substrac from libros stock
         cursor.execute("""SELECT stock FROM Libros WHERE id_libro = %s  """, (INDICE))
         value = cursor.fetchone()
         new_stock = value['stock'] - amount
         cursor.execute ("""UPDATE Libros SET stock = %s WHERE id_libro=%s""", (new_stock, INDICE))
 
-        print("VALUE = ",value)
-
+        #cursor.execute("""DELETE FROM Libros WHERE stock = %s  """, (0))
+        
         #add a record in Compras table
         #first get user id
         user_acount = session.get('correo')
-        
         cursor.execute("""SELECT id_usuario FROM Usuarios WHERE correo = %s  """, (user_acount))
         value = cursor.fetchone()
         userID = value.get('id_usuario')
+
         cursor.execute("""SELECT precio FROM Costos WHERE id_libro = %s  """, (INDICE))
-        value = cursor.fetchone()
-        bookprice = value.get('precio')
+        price = cursor.fetchone()
+        print("INDICE ==",INDICE)
+        print("Price == ",price)
+        bookprice = price.get('precio')
         bookprice = bookprice*amount
 
         cursor.execute('INSERT INTO Compras (libros_comprados,total, id_usuario, id_libro) VALUES (%s,%s,%s,%s)',(amount,bookprice ,userID, INDICE))
@@ -395,6 +406,7 @@ def buy_book():
         cursor.execute("""SELECT id_usuario FROM Usuarios WHERE correo = %s  """, (user_acount))
         value = cursor.fetchone()
         
+        
 
         # Configuración del servidor de correo
         app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -413,7 +425,7 @@ def buy_book():
     
     msg = Message(subject = 'Ticket de compra', sender='20223tn080@utez.edu.mx', recipients=[user_acount],body="This is the plain text body",html="<p>This is the HTML body</p>" )
     
-    mail.send(msg)
+    #mail.send(msg)
     return view_index(False)
     
 

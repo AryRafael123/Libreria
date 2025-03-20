@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask import Flask, session
+from flask_mail import Mail, Message
+
 import pymysql
 import os
 import binascii
@@ -7,6 +9,8 @@ from config import Config
 import requests
 
 app = Flask(__name__)
+
+
 
 
 @app.route('/display_cart', methods=['GET'])
@@ -19,14 +23,10 @@ def display_cart():
     connection.close()
 
 
-  
     if items:
         return jsonify(items)
     else:
         return jsonify({"error": "User not found"}), 404
-
-
-
 
 # Configurations to add a image to a book
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
@@ -46,7 +46,7 @@ def get_db_connection():
     connection = pymysql.connect(
         host='127.0.0.1',
         user='root',
-        password='mysqlpassword123',
+        password='root',
         db='libreria',
         cursorclass=pymysql.cursors.DictCursor  # To get results as dictionaries
     )
@@ -378,7 +378,7 @@ def buy_book():
         bookprice = value.get('precio')
         bookprice = bookprice*amount
 
-        cursor.execute('INSERT INTO Compras (libros_comprados,total, id_usuario, id_libro) VALUES (%s,%s,%s)',(amount,bookprice ,userID, INDICE))
+        cursor.execute('INSERT INTO Compras (libros_comprados,total, id_usuario, id_libro) VALUES (%s,%s,%s,%s)',(amount,bookprice ,userID, INDICE))
 
         #add one purchase to the user
         cursor.execute("""SELECT libros_comprados FROM Usuarios WHERE correo = %s  """, (user_acount))
@@ -392,13 +392,30 @@ def buy_book():
             x += amount
             cursor.execute ("""UPDATE Usuarios SET libros_comprados = %s WHERE id_usuario=%s""", (x, userID))
 
+        cursor.execute("""SELECT id_usuario FROM Usuarios WHERE correo = %s  """, (user_acount))
+        value = cursor.fetchone()
+        
+
+        # Configuración del servidor de correo
+        app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+        app.config['MAIL_PORT'] = 587
+        app.config['MAIL_USE_TLS'] = True
+        app.config['MAIL_USERNAME'] = '20223tn080@utez.edu.mx'
+        app.config['MAIL_PASSWORD'] = 'zdjk lpob yuxq yrtb'
+
+       
 
         connection.commit()  # Commit changes to the database
     connection.close()
 
+    mail = Mail(app)
+    user_acount = session.get('correo')
+    
+    msg = Message(subject = 'Ticket de compra', sender='20223tn080@utez.edu.mx', recipients=[user_acount],body="This is the plain text body",html="<p>This is the HTML body</p>" )
+    
+    mail.send(msg)
     return view_index(False)
     
-
 
 
 @app.route('/template_add_cart')

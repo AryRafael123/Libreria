@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library Shopping</title>
-    <link rel="stylesheet" href="../static/css/index_base_style.css">
+    <link rel="stylesheet" href="../static/css/base_pages.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
@@ -116,21 +116,34 @@
     </div>
 
 <main>
+  
   {% block content %}
   {% endblock %}
-  
-
-{% block rating %}{% endblock %}
-{% block comment %}{% endblock %}
 
 </main>
+
+
+<section id="about" class="section">
+  <h2>About Us</h2>
+  <p>We are passionate about bringing high-quality books and learning materials to readers everywhere. Whether you're an avid reader or looking for textbooks, we have something for everyone.</p>
+</section>
+
+<section id="contact" class="section">
+  <h2>Contact Us</h2>
+  <p>Have questions or need assistance? Reach out to us!</p>
+  <form action="submit_form.php" method="POST">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+      <button type="submit">Send Message</button>
+  </form>
+</section>
 
 
     <footer>
       <p>&copy; 2025 Library Shopping. All rights reserved.</p>
   </footer>
-
-
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script></script>
     

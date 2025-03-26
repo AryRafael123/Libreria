@@ -1,16 +1,22 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask import Flask, session
 from flask_mail import Mail, Message
-
 import pymysql
 import os
 import binascii
 from config import Config
 import requests
+import yaml
 
 app = Flask(__name__)
 
+with open('urls.yaml', 'r') as file:
+    urls_data = yaml.safe_load(file)
+print(urls_data) # {'home': '/', 'cart': '/template_add_cart', 'purchases': '/template_purchases', 'Edit user': '/template_edit_user'}
 
+@app.route('/template_urls')
+def template_urls():
+    return render_template('form.html')
 
 
 @app.route('/display_cart', methods=['GET'])
@@ -598,8 +604,6 @@ def buy_items():
     
     return view_index(False)
     
-
-
 
 @app.route('/template_purchases')
 def template_purchases():

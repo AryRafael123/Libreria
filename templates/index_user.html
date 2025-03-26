@@ -23,7 +23,7 @@
               <img id="item-image" src="{{row['imagen']}}" alt="">
 
               <div>
-                <form action="book_details" method="post">
+                <form action="book_details" method="post" class="buy-now-button" >
                   <input type="hidden" name="id_libro" value="{{ row['id_libro'] }}">
                   <button type="submit" >Buy now</button>
                 </form>

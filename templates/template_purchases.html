@@ -1,5 +1,6 @@
 {% extends 'base_pages.html'%}
 
+
 {% block content %}
 <!--review your purchases-->
     <section id="home" class="section">
@@ -25,19 +26,23 @@
                                     
                                       <!--button-->
                                 </div>
-                                <div>
-                                    <button id="bookID"  value="{{BOOKS[x][0]['id_libro']}}"   type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#{{x}}" >Display</button>
-                                            
+
+
+                                <div> <!-- rate button-->
+                                    <button id="bookID"  value="{{BOOKS[x][0]['id_libro']}}"   type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#{{x}}" >Rate book</button>         
                                 </div>
 
-                                </div>
+                                <div> <!-- display button-->
+                                  <button id="bookID"  value="{{BOOKS[x][0]['id_libro']}}"   type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Display{{x}}" >Display</button>         
+                              </div>
 
+                                </div>
                               </div>
                           
                         </section>
               
 
-                          <!-- MODAL -->
+                          <!-- MODAL to rate book-->
                             <div class="modal fade" id="{{x}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                               <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                               <div class="modal-content">
@@ -54,7 +59,7 @@
                                     <h2 class="fs-5">Would you like to rate your book?</h2>
                                   
                                     
-                                    <form action="book_rating" method="post">
+                                    <form action="book_rating" method="post" class="no-hover-form">
 
                                             <div id="stars">
                                               <!-- Star buttons, click will update the rating -->
@@ -87,6 +92,42 @@
                               </div>
                               </div>
                             </div>
+                          
+                          <!-- MODAL to display more information-->
+                          <div class="modal fade" id="Display{{x}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel"> Details </h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+
+
+                                  <h2 class="fs-5">Info about your purchased </h2>
+                                  <p>Your pound arrived on January 17 at 2:05 p.m.</p>
+                                  <hr>
+                                  <h2 class="fs-5">Times you have purchased this book</h2>
+                                  
+                                  <h3>{{list_amount[x]}}</h3>
+
+                                  <form >
+
+                                    
+                                          
+                                      </div>
+                                      <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                                      <button id="myForm"  type="submit" class="btn btn-primary" >Save changes</button>
+                                  </form>
+                                
+
+                                </div>
+                            </div>
+                            </div>
+                          </div>
+
 
                {% endfor %}
             
@@ -96,4 +137,35 @@
 
 
     </section>
+
+    <script>
+
+      document.querySelector('#catalog').addEventListener('click', function(event) {
+          if (event.target && event.target.matches('.star-button')) {
+              // Get the rating value from the clicked star button
+              let rating = event.target.getAttribute('data-rating');
+              
+              // Get the corresponding modal's index (assuming the modal's id is based on the loop index)
+              let modalId = event.target.closest('.modal').id;
+              let bookId = modalId.replace('x', '');  // Remove the prefix 'x' to get the actual modal index
+      
+              // Update the hidden input with the rating for the specific modal
+              document.getElementById('rating-' + bookId).value = rating;
+      
+              // Optional: Add visual feedback by highlighting selected stars
+              let stars = event.target.closest('#stars').querySelectorAll('.star-button');
+              stars.forEach(star => {
+                  if (parseInt(star.getAttribute('data-rating')) <= rating) {
+                      star.classList.add('selected');  // Highlight selected stars
+                  } else {
+                      star.classList.remove('selected');  // Remove highlight for unselected stars
+                  }
+              });
+          }
+      });
+      
+      
+      
+    </script>
 {% endblock%}
+

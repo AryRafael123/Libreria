@@ -46,7 +46,7 @@ def get_db_connection():
     connection = pymysql.connect(
         host='127.0.0.1',
         user='root',
-        password='root',
+        password='mysqlpassword123',
         db='libreria',
         cursorclass=pymysql.cursors.DictCursor  # To get results as dictionaries
     )
@@ -373,30 +373,56 @@ def buy_book():
         new_stock = value['stock'] - amount
         cursor.execute ("""UPDATE Libros SET stock = %s WHERE id_libro=%s""", (new_stock, INDICE))
 
-        #cursor.execute("""DELETE FROM Libros WHERE stock = %s  """, (0))
         
-        #add a record in Compras table
-        #first get user id
+        #update or insert a record in Compras table
+        #get user id : > userID <
         user_acount = session.get('correo')
         cursor.execute("""SELECT id_usuario FROM Usuarios WHERE correo = %s  """, (user_acount))
         value = cursor.fetchone()
         userID = value.get('id_usuario')
-
+        #get book price: > bookprice <
         cursor.execute("""SELECT precio FROM Costos WHERE id_libro = %s  """, (INDICE))
         price = cursor.fetchone()
         print("INDICE ==",INDICE)
         print("Price == ",price)
         bookprice = price.get('precio')
+        book_price = price.get('precio')
         bookprice = bookprice*amount
 
-        cursor.execute('INSERT INTO Compras (libros_comprados,total, id_usuario, id_libro) VALUES (%s,%s,%s,%s)',(amount,bookprice ,userID, INDICE))
+    
+        Book = False
+        #evaluate if the book id is in Compras table
+        cursor.execute("""SELECT id_libro FROM Compras """)
+        value = cursor.fetchall() # [{'id_libro': 1},{'id_libro': 2}] / none
+        if value == None:
+            pass
+        else:
+            for x in range(0,len(value)):
+                if value[x]['id_libro'] == INDICE:
+                    book = True
+                else:
+                    pass
+    
+        if Book == False: # the book is not in Compras table
+            cursor.execute('INSERT INTO Compras (libros_comprados,total, id_usuario, id_libro) VALUES (%s,%s,%s,%s)',(amount,bookprice ,userID, INDICE))
+        else: #we update the table
+            cursor.execute("""SELECT libros_comprados FROM Compras WHERE id_libro = %s  """, (INDICE))
+            books_purchased = cursor.fetchone()
+            purchasedBooks = int(books_purchased.get('libros_comprados'))
+            purchasedBooks += amount # we get all the purchased books
+            cursor.execute("""SELECT total FROM Compras WHERE id_usuario = %s  """, (userID))
+            TOTAL = cursor.fetchone()
+            x = TOTAL.get('precio')
+            total = book_price + amount*(int(price.get('precio'))) 
+            cursor.execute ("""UPDATE Compras SET libros_comprados=%s,total=%s WHERE id_usuario=%s""", (purchasedBooks,total,userID))
+
 
         #add one purchase to the user
         cursor.execute("""SELECT libros_comprados FROM Usuarios WHERE correo = %s  """, (user_acount))
         value = cursor.fetchone()
 
         if value.get('libros_comprados') == None:
-            x = 1
+            x = amount
             cursor.execute ("""UPDATE Usuarios SET libros_comprados = %s WHERE id_usuario=%s""", (x, userID))
         else:
             x = int(value.get('libros_comprados'))
@@ -420,7 +446,7 @@ def buy_book():
         connection.commit()  # Commit changes to the database
     connection.close()
 
-    mail = Mail(app)
+    #mail = Mail(app)
     user_acount = session.get('correo')
     
     msg = Message(subject = 'Ticket de compra', sender='20223tn080@utez.edu.mx', recipients=[user_acount],body="This is the plain text body",html="<p>This is the HTML body</p>" )
@@ -428,7 +454,6 @@ def buy_book():
     #mail.send(msg)
     return view_index(False)
     
-
 
 @app.route('/template_add_cart')
 def template_add_cart():
@@ -447,6 +472,7 @@ def template_add_cart():
         booksIDS = cursor.fetchall() #BOOKSIDS ==  [{'id_libro': 2}, {'id_libro': 1}]
         print("booksIDS == ",booksIDS)
         print("LEN = ",len(booksIDS))
+
 
         #get prices
         prices =0
@@ -588,7 +614,7 @@ def template_purchases():
         #lets get all purchases from the data base 
         cursor.execute("""SELECT id_libro FROM Compras WHERE id_usuario = %s  """, (userID))
         values = cursor.fetchall()
-        print('VALUES = ',values) # VALUES =  [{'id_libro': x}, {'id_libro': y}, {'id_libro':z}]
+        print('VALUES = ',values) # VALUES =  [{'id_libro': x}, {'id_libro': x}, {'id_libro':z}, {'id_libro':z}, {'id_libro':z} ]
 
         indices =[]
         for x in range(0,len(values)): 
@@ -604,8 +630,15 @@ def template_purchases():
         rango = len(books)
         cursor.execute("""SELECT * FROM Libros WHERE id_libro = %s  """, (userID))
 
+        #send the times the user had purchased the book
+        amount = []
+        cursor.execute("""SELECT libros_comprados FROM Compras""")
+        values = cursor.fetchall()
+        for x in range(0,len(values)):
+            amount.append(int(values[x]['libros_comprados'])) # amount = [12,13,14,...]
+        print("AMOUNT LIST = ",amount)
     
-    return render_template('template_purchases.html', BOOKS = books, rango = rango) 
+    return render_template('template_purchases.html', BOOKS = books, rango = rango, list_amount = amount) 
 
 
 

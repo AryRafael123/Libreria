@@ -93,16 +93,10 @@
             </div>
         </section>
 
-{% endblock %}
-
-
-
-
-{% block rating %}
-        
+    <!--raiting-->
     <section class="user-rating">
         <!-- Add icon library -->
-    <link rel="stylesheet" href="style.css">
+    
 
     <span class="heading">User Rating</span>
     <span class="fa fa-star checked"></span>
@@ -195,11 +189,7 @@
 
     </section>
 
-
-{% endblock %}
-
-{% block comment %}
-    
+    <!--comments-->
     {% for row in opiniones %}
         <section class="comments">
         <div>
@@ -209,13 +199,11 @@
         </section>
     {% endfor %}    
 
-{% endblock %}
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 
-{% block script %}
+<!--script to display the raiting-->
 <script>
 
 const total = document.getElementById("total-views").value;
@@ -252,6 +240,7 @@ element1.style.width = resultado1 + "%" // Dynamically change height
 
 </script>
  
+<!--script to display the summary $-->
 <script>
 
 const PricePerBook = document.getElementById('Precio');
@@ -287,7 +276,6 @@ var TotalCompras = document.getElementById('NumeroCompras');
 
 
 </script>
-
 
 
 {% endblock %}

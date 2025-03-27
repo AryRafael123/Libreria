@@ -45,14 +45,21 @@
     </style>
 </head>
 <body>
-    <form action="/submit" method="post">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
+    <form action="/change_labels" method="post">
         
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
+        <h2>Change button Labels</h2>
+
+        <label for="name">Buy books:</label>
+        <input type="text" id="buy-books" name="buy books" value="{{ labels['buttons']['buy'] }}" required>
         
-        <input type="submit" value="Submit">
+        <label for="email">Log out:</label>
+        <input type="text" id="log-out" name="log out" value="{{ labels['buttons']['logout'] }}" required>
+        
+        <label for="email">Search:</label>
+        <input type="text" id="search" name="search" value="{{ labels['buttons']['search'] }}" required>
+
+        <button type="submit" > Save changes</button>
     </form>
+
 </body>
 </html>

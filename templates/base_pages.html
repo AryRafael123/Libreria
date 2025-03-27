@@ -56,7 +56,7 @@
                             </li>
 
                             <li class="nav-item">
-                              <a class="nav-link" href="#">Edit urls</a>
+                              <a class="nav-link" href="{{ url_for('template_labels') }}">Edit button labels</a>
                             </li>
 
                             <li class="nav-item">
@@ -73,7 +73,7 @@
 
                             <li class="nav-item">
                               <form action="log_out" class="log_out-button">
-                                <button type="button" id="liveToastBtn">Log out</button>
+                                <button type="button" id="liveToastBtn">{{ labels['buttons']['logout'] }}</button>
                               </form>
                               
                             </li>

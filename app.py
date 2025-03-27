@@ -10,13 +10,17 @@ import yaml
 
 app = Flask(__name__)
 
-with open('urls.yaml', 'r') as file:
-    urls_data = yaml.safe_load(file)
-print(urls_data) # {'home': '/', 'cart': '/template_add_cart', 'purchases': '/template_purchases', 'Edit user': '/template_edit_user'}
 
-@app.route('/template_urls')
-def template_urls():
-    return render_template('form.html')
+# Load labels from YAML file
+def load_labels():
+    with open("labels.yaml", "r") as file:
+        return yaml.safe_load(file)
+
+# Save labels to YAML file
+def save_labels(data):
+    with open("labels.yaml", "w") as file:
+        yaml.safe_dump(data, file)
+
 
 
 @app.route('/display_cart', methods=['GET'])
@@ -79,7 +83,7 @@ def view_index(admin):
         #return url_for('/admin')
         return render_template('index_admin.html', data=value)
     else:
-        return render_template('index_user.html', data=value)
+        return render_template('index_user.html', data=value, labels = load_labels())
 
 
 @app.route('/')
@@ -106,6 +110,28 @@ def index():
                     #normal user
                     return view_index(False)
                
+
+@app.route('/template_labels')
+def template_labels():
+
+    labels = load_labels()
+
+    return render_template('form.html', labels = load_labels() )
+
+@app.route('/change_labels', methods=['POST'])
+def change_labels():
+
+    labels = load_labels()
+
+    # Update labels with form data
+    labels["buttons"]["buy"] = request.form["buy books"]
+    labels["buttons"]["logout"] = request.form["log out"]
+    labels["buttons"]["search"] = request.form["search"]
+
+    save_labels(labels)  # Save updated labels to YAML
+
+    return view_index(False)
+
 
 @app.route('/sign_in', methods=['POST'])
 def add_user():

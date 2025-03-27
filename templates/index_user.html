@@ -25,7 +25,7 @@
               <div>
                 <form action="book_details" method="post" class="buy-now-button" >
                   <input type="hidden" name="id_libro" value="{{ row['id_libro'] }}">
-                  <button type="submit" >Buy now</button>
+                  <button type="submit" >{{ labels['buttons']['buy'] }}</button>
                 </form>
               </div>
                 
@@ -43,17 +43,17 @@
         <div class="item">
             <h3>Book Title 1</h3>
             <p>Description of the book.</p>
-            <button>Buy Now</button>
+            <button>{{ labels['buttons']['buy'] }}</button>
         </div>
         <div class="item">
             <h3>Book Title 2</h3>
             <p>Description of the book.</p>
-            <button>Buy Now</button>
+            <button>{{ labels['buttons']['buy'] }}</button>
         </div>
         <div class="item">
             <h3>Book Title 3</h3>
             <p>Description of the book.</p>
-            <button>Buy Now</button>
+            <button>{{ labels['buttons']['buy'] }}</button>
         </div>
     </div>
 </section>

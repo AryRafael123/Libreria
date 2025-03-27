@@ -358,3 +358,8 @@ main {
     display: none;
   }
 }
+
+/*input amount*/
+.amount{
+    padding: 10px;
+}

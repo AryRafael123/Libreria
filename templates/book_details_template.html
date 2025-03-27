@@ -1,7 +1,40 @@
 {% extends 'base.html' %}
 
 
+
 {% block content %}
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PayPal JS SDK Standard Integration</title>
+
+    <!-- Initialize the JS-SDK -->
+    
+    <script src="https://www.paypal.com/sdk/js?client-id=AbducxexQw-HObCokRA9XyCiXRiKyprjWc7FxOKhBQGKZlIAheWIRrs_R6fZ1MUQwXTE4K3uY2fafUGF&currency=USD"></script>
+
+    <script>
+         paypal.Buttons({
+            createOrder: function(data, actions) {
+                return fetch('/create_order', {
+                    method: 'POST'
+                }).then(response => response.json())
+                .then(order => order.id);
+            },
+            onApprove: function(data, actions) {
+                return fetch(`/capture-order/${data.orderID}`, {
+                    method: 'POST'
+                }).then(response => response.json())
+                .then(order => {
+                    alert('Payment Successful!');
+                    console.log(order);
+                });
+            }
+        }).render('#paypal-button-container');
+    </script>
+
+</head>
+
+
       <section class="book-details">
             <div class="book-container">
               
@@ -21,7 +54,7 @@
 
                   <div class="amount">
                     
-                        <label for="cantidad">amount:</label>
+                        <label for="cantidad">Amount:</label>
                         <input type="number" id="cantidad" name="cantidad" min="1" max="{{libros.stock}}" value="1" required> <!-- cantidad-->
                         <input type="hidden" value = "{{costos.precio}}" id="Precio" > <!-- precio -->
                                          
@@ -30,8 +63,9 @@
                   
 
                   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-to-cart" >Add to Cart</button>
-                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" >Buy Now</button>
-
+                  <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" >Buy Now</button> --> 
+                  <div id="paypal-button-container"></div>
+                  <p id="result-message"></p>
                 </div>
                   
               <!-- button settings-->
@@ -276,6 +310,8 @@ var TotalCompras = document.getElementById('NumeroCompras');
 
 
 </script>
+
+
 
 
 {% endblock %}

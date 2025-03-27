@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask import Flask, session
 from flask_mail import Mail, Message
 import pymysql
@@ -7,8 +7,72 @@ import binascii
 from config import Config
 import requests
 import yaml
+import paypalrestsdk
+
 
 app = Flask(__name__)
+
+# PayPal API Credentials (Replace with your sandbox credentials)
+PAYPAL_CLIENT_ID = "AbducxexQw-HObCokRA9XyCiXRiKyprjWc7FxOKhBQGKZlIAheWIRrs_R6fZ1MUQwXTE4K3uY2fafUGF"
+PAYPAL_SECRET = "EOcXBp8S96NQl6YSz9CbMQ954XjWT0JuJiUgDDYPLoaCB82hVqinjs21JqBMDlv9f8fPGBvvsI5pzf6d"
+PAYPAL_API_BASE = "https://sandbox.paypal.com"  # Sandbox URL
+
+
+
+# Function to get PayPal access token
+def get_paypal_access_token():
+    auth = (PAYPAL_CLIENT_ID, PAYPAL_SECRET)
+    response = requests.post(f"{PAYPAL_API_BASE}/v1/oauth2/token",
+                             data={"grant_type": "client_credentials"},
+                             auth=auth)
+    return response.json().get("access_token")
+
+
+# Route to create an order
+@app.route("/create_order", methods=["POST"])
+def create_order():
+    access_token = get_paypal_access_token()
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {access_token}"
+    }
+    data = {
+        "intent": "CAPTURE",
+        "purchase_units": [{
+            "amount": {"currency_code": "USD", "value": "10.0"}  # Change amount here
+        }]
+    }
+    response = requests.post(f"{PAYPAL_API_BASE}/v2/checkout/orders", json=data, headers=headers)
+    return jsonify(response.json())
+
+# Route to capture payment
+@app.route("/capture-order/<order_id>", methods=["POST"])
+def capture_order(order_id):
+    access_token = get_paypal_access_token()
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {access_token}"
+    }
+    response = requests.post(f"{PAYPAL_API_BASE}/v2/checkout/orders/{order_id}/capture", headers=headers)
+    return jsonify(response.json())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Load labels from YAML file
@@ -387,7 +451,7 @@ def book_details():
 
 
 
-    return render_template('book_details_template.html', libros=value, costos=value2, Indice = INDICE, total = TOTAL, opiniones = comentarios , views = reviews, star_1 = star1, star_2 = star2, star_3 = star3, star_4 = star4, star_5 = star5)
+    return render_template('book_details_template.html',client_id=PAYPAL_CLIENT_ID, libros=value, costos=value2, Indice = INDICE, total = TOTAL, opiniones = comentarios , views = reviews, star_1 = star1, star_2 = star2, star_3 = star3, star_4 = star4, star_5 = star5)
 
 
 @app.route('/buy_book', methods=['POST'])
@@ -668,7 +732,7 @@ def template_purchases():
             amount.append(int(values[x]['libros_comprados'])) # amount = [12,13,14,...]
         print("AMOUNT LIST = ",amount)
     
-    return render_template('template_purchases.html', BOOKS = books, rango = rango, list_amount = amount) 
+    return render_template('template_purchases.html',labels = load_labels(), BOOKS = books, rango = rango, list_amount = amount) 
 
 
 

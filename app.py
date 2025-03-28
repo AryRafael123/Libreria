@@ -120,7 +120,7 @@ def get_db_connection():
     connection = pymysql.connect(
         host='127.0.0.1',
         user='root',
-        password='root',
+        password='mysqlpassword123',
         db='libreria',
         cursorclass=pymysql.cursors.DictCursor  # To get results as dictionaries
     )

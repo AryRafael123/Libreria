@@ -70,8 +70,9 @@
                 <p>{{row['autor']}}</p>
                 <img id="item-image" src="{{row['imagen']}}" alt="">
 
-                <form action="/edite_book" method="post" >
-                    <button type="submit" >Edit</button>
+                <form action="/templates_edit_book" method = "post">
+                    <button type="summit">Edit</button>
+                    <input type="hidden" name="id_libro" value="{{ row['id_libro'] }}">
                 </form>
            
                 <form action="/delete_book" method="post">

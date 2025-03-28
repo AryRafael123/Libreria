@@ -120,7 +120,7 @@ def get_db_connection():
     connection = pymysql.connect(
         host='127.0.0.1',
         user='root',
-        password='mysqlpassword123',
+        password='root',
         db='libreria',
         cursorclass=pymysql.cursors.DictCursor  # To get results as dictionaries
     )
@@ -348,6 +348,34 @@ def delete_book():
 
     return view_index(True)
 
+@app.route('/templates_edit_book', methods=['POST'])
+def templates_edit_book():
+    id_libro2 = request.form['id_libro']
+    return render_template('edit_book.html',id=id_libro2)
+
+@app.route('/edite_book', methods=['POST'])
+def EDITE_BOOK():
+    INDICE = int(request.form['ID_LIBRO'])
+    image = request.files.get('image')
+    if image and allowed_file(image.filename):
+        filename = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
+        image.save(filename)
+    print("filename = ",filename)
+    # This is the form data that Flask receives
+    new_name = request.form['name']  # Flask looks for the 'username' key
+    new_autor = request.form['autor']
+    new_editorial = request.form['editorial']
+    new_descripcion = request.form['descripcion']
+    new_precio = request.form['precio']
+        
+    connection = get_db_connection()
+    with connection.cursor() as cursor:
+       
+        cursor.execute ("""UPDATE Libros SET nombre_libro=%s, autor=%s, editorial=%s,descripcion=%s, imagen=%s  where id_libro = %s""", (new_name,new_autor,new_editorial,new_descripcion,filename,INDICE))
+        cursor.execute ("""UPDATE Costos SET precio=%s where id_libro = %s""", (new_precio,INDICE))
+        connection.commit()
+        connection.close()
+    return view_index(True)
 
 @app.route('/add_book', methods=['POST'])
 def ADD_BOOK():

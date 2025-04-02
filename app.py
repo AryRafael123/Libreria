@@ -13,8 +13,10 @@ import paypalrestsdk
 app = Flask(__name__)
 
 # PayPal API Credentials (Replace with your sandbox credentials)
-PAYPAL_CLIENT_ID = "AbducxexQw-HObCokRA9XyCiXRiKyprjWc7FxOKhBQGKZlIAheWIRrs_R6fZ1MUQwXTE4K3uY2fafUGF"
-PAYPAL_SECRET = "EOcXBp8S96NQl6YSz9CbMQ954XjWT0JuJiUgDDYPLoaCB82hVqinjs21JqBMDlv9f8fPGBvvsI5pzf6d"
+#PAYPAL_CLIENT_ID = "AbducxexQw-HObCokRA9XyCiXRiKyprjWc7FxOKhBQGKZlIAheWIRrs_R6fZ1MUQwXTE4K3uY2fafUGF"
+#PAYPAL_SECRET = "EOcXBp8S96NQl6YSz9CbMQ954XjWT0JuJiUgDDYPLoaCB82hVqinjs21JqBMDlv9f8fPGBvvsI5pzf6d"
+PAYPAL_CLIENT_ID = "AVuuO9ebw5JS7AptdgDMyhQ14Knq3udTdRxTB3RZfkp8rIEQyQYwpaPH5PzQizyXubwN5xHsmyx58oW-"
+PAYPAL_SECRET = "EM438loYDqhR55FrnTEiezbsmAMb9-B4247yUeJ0mJgFY8RSsqunBmZotxpgxDtW1MghjuYTNS7OAorT"
 PAYPAL_API_BASE = "https://sandbox.paypal.com"  # Sandbox URL
 
 
@@ -31,6 +33,8 @@ def get_paypal_access_token():
 # Route to create an order
 @app.route("/create_order", methods=["POST"])
 def create_order():
+    data = request.get_json()
+    precio_libro = data['precio']
     access_token = get_paypal_access_token()
     headers = {
         "Content-Type": "application/json",
@@ -39,7 +43,7 @@ def create_order():
     data = {
         "intent": "CAPTURE",
         "purchase_units": [{
-            "amount": {"currency_code": "USD", "value": "10.0"}  # Change amount here
+            "amount": {"currency_code": "MXN", "value": precio_libro}  # Change amount here
         }]
     }
     response = requests.post(f"{PAYPAL_API_BASE}/v2/checkout/orders", json=data, headers=headers)
@@ -55,22 +59,6 @@ def capture_order(order_id):
     }
     response = requests.post(f"{PAYPAL_API_BASE}/v2/checkout/orders/{order_id}/capture", headers=headers)
     return jsonify(response.json())
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -206,7 +194,7 @@ def add_user():
     # Insert the new user into the database
     connection = get_db_connection()
     with connection.cursor() as cursor:
-        cursor.execute('SELECT tipo_usuario, correo, contraseña FROM Usuarios')
+        cursor.execute('SELECT id_usuario, tipo_usuario, correo, contraseña FROM Usuarios')
         value = cursor.fetchall()
         connection.close()
     
@@ -222,6 +210,7 @@ def add_user():
             existe = True
             sesion = True
             session['correo'] = mail
+            session['id_usuario'] = value[x]["id_usuario"]
             if value[x]["tipo_usuario"]==True:
                 #usuario administrador
                 admin = True
@@ -278,7 +267,8 @@ def ADD_USER2():
 def LOG_OUT():
     #eliminar la variable sesion
    
-    session.popitem()
+    #session.popitem()
+    session.clear()
     
     return render_template('index.html')
 
@@ -419,7 +409,6 @@ def ADD_BOOK():
 
     return view_index(True)
 
-
 @app.route('/book_details', methods=['POST'])
 def book_details():
 
@@ -479,14 +468,22 @@ def book_details():
 
 
 
-    return render_template('book_details_template.html',client_id=PAYPAL_CLIENT_ID, libros=value, costos=value2, Indice = INDICE, total = TOTAL, opiniones = comentarios , views = reviews, star_1 = star1, star_2 = star2, star_3 = star3, star_4 = star4, star_5 = star5)
+    return render_template('book_details_template.html',client_id=PAYPAL_CLIENT_ID, libros=value, costos=value2, Indice = INDICE, total = TOTAL, opiniones = comentarios , views = reviews, star_1 = star1, star_2 = star2, star_3 = star3, star_4 = star4, star_5 = star5, labels = load_labels())
 
 
 @app.route('/buy_book', methods=['POST'])
 def buy_book():
 
-    INDICE = int(request.form['id_libro'])
-    amount = int(request.form['NumeroCompras'])
+    data = request.get_json()
+
+    #INDICE = data['id_libro']
+    #amount = data['cantidad']
+
+    print("INDICEEEEEEEEE: ", INDICE)
+    print("CANTIDADDDDDDD: ", cantidad)
+
+    #INDICE = int(request.form['id_libro'])
+    #amount = int(request.form['NumeroCompras'])
     
 
     connection = get_db_connection()
@@ -570,12 +567,12 @@ def buy_book():
         connection.commit()  # Commit changes to the database
     connection.close()
 
-    #mail = Mail(app)
+    mail = Mail(app)
     user_acount = session.get('correo')
     
     msg = Message(subject = 'Ticket de compra', sender='20223tn080@utez.edu.mx', recipients=[user_acount],body="This is the plain text body",html="<p>This is the HTML body</p>" )
     
-    #mail.send(msg)
+    mail.send(msg)
     return view_index(False)
     
 
@@ -587,46 +584,32 @@ def template_add_cart():
 
         #get nombre_libro, autor, imagen, precio 
         #get id_usuario
-        user_acount = session.get('correo')      
-        cursor.execute("""SELECT id_usuario FROM Usuarios WHERE correo = %s  """, (user_acount))
-        value = cursor.fetchone()
-        userID = value.get('id_usuario')
-
-        cursor.execute("""SELECT id_libro FROM Items WHERE id_usuario = %s  """, (userID))
-        booksIDS = cursor.fetchall() #BOOKSIDS ==  [{'id_libro': 2}, {'id_libro': 1}]
-        print("booksIDS == ",booksIDS)
-        print("LEN = ",len(booksIDS))
-
-
-        #get prices
-        prices =0
-        for x in range(0,len(booksIDS)):
-            cursor.execute("""SELECT precio FROM Costos WHERE id_libro = %s  """, (booksIDS[x]['id_libro']))
-            books_prices = cursor.fetchall() 
-            prices += books_prices[0]['precio']
-    
-        #save the books in a list to show them later 
-        Libros = []
-        for x in range(0,len(booksIDS)):
-            cursor.execute("""SELECT nombre_libro, autor, imagen FROM Libros WHERE id_libro = %s  """, (booksIDS[x]['id_libro']))
-            books = cursor.fetchall() # [{'nombre_libro': 'El pincipe', 'autor': 'Nicolas Maquiavelo', 'imagen': 'static/uploads\\libro2.jpg'}]
-            Libros.append(books) # Libros = [[{'nombre_libro': 'El pincipe', 'autor': 'Nicolas Maquiavelo', 'imagen': 'static/uploads\\libro2.jpg'}], [{'nombre_libro': 'El capital', 'autor': 'Karl Marx', 'imagen': 'static/uploads\\libro1.jpg'}]]
         
+        user_acount = session.get('id_usuario')
+        cursor.execute("""SELECT libros.id_libro, libros.nombre_libro, libros.autor, libros.imagen, libros.descripcion, items.cantidad, items.id_item, items.total, costos.precio
+                            FROM libros
+                            INNER JOIN items
+                            INNER JOIN costos
+                            ON libros.id_libro = items.id_libro AND
+                            libros.id_libro = costos.id_libro
+                            WHERE items.id_usuario = %s""", (user_acount))
+        value = cursor.fetchall()
+        print("VALUEEEEE: ",value)
+        prices = 0
+        for fila in value:
+            prices = prices + int(fila['total'])
+            
 
-        rango = len(Libros)
         #lets defined if there are books or not
-        if len(Libros) > 0:
+        if len(value) > 0:
             cart = True
         else:
             cart = False
 
-        
-
-
         connection.commit()  # Commit changes to the database
     connection.close()
 
-    return render_template('template_cart.html',Books = Libros, rango = rango, cart = cart, total_price = prices)
+    return render_template('template_cart.html', cart = cart, total_price = prices, labels = load_labels())
     
 
 @app.route('/add_cart', methods=['POST'])
@@ -640,18 +623,31 @@ def add_cart():
     connection = get_db_connection()
     with connection.cursor() as cursor:
         #get id_usuario
-        user_acount = session.get('correo')      
-        cursor.execute("""SELECT id_usuario FROM Usuarios WHERE correo = %s  """, (user_acount))
-        value = cursor.fetchone()
-        userID = value.get('id_usuario')
+        userID = session.get('id_usuario')
 
         #get id_precio
-        cursor.execute("""SELECT id_precio FROM Costos WHERE id_libro = %s  """, (INDICE))
+        cursor.execute("""SELECT id_precio, precio FROM Costos WHERE id_libro = %s  """, (INDICE))
         value2 = cursor.fetchone()
         priceID = value2.get('id_precio')
+        precio = value2.get('precio')
+        total = precio*amount
 
-        #insert into Items
-        cursor.execute('INSERT INTO Items (id_usuario,cantidad,id_libro,id_precio) VALUES (%s,%s,%s,%s)',(userID,amount,INDICE,priceID))
+        #Validación que no permitirá que se agrega un nuevo registro si ya existe, solo actualizará el valor
+        cursor.execute("SELECT * FROM items WHERE id_libro = %s AND id_usuario = %s", (INDICE, int(userID)))
+        value3 = cursor.fetchone()
+
+        print("CONTEO:")
+        print("VALLLLLOOOOOOOOR")
+        print(value3)
+        
+
+        if value3 is not None:
+            cantidad = int(value3.get('cantidad')) + amount
+            totalPrecio = cantidad*precio
+            cursor.execute ("""UPDATE items SET cantidad = %s, total = %s  WHERE id_item=%s""", (cantidad, totalPrecio, value3.get('id_item')))
+        else:
+            #insert into Items
+            cursor.execute('INSERT INTO Items (id_usuario,cantidad,id_libro,id_precio,total) VALUES (%s,%s,%s,%s,%s)',(userID,amount,INDICE,priceID,total))
 
         connection.commit()  # Commit changes to the database
     connection.close()
@@ -763,7 +759,6 @@ def template_purchases():
     return render_template('template_purchases.html',labels = load_labels(), BOOKS = books, rango = rango, list_amount = amount) 
 
 
-
 @app.route('/book_rating', methods=['POST'])
 def book_rating():
     INDICE = int(request.form['id_libro'])
@@ -804,9 +799,58 @@ def book_rating():
     return template_purchases()
 
 
+@app.route('/mostrarCarrito', methods=['POST'])
+def mostrarCarrito():
+    connection = get_db_connection()
+    with connection.cursor() as cursor:
 
+        #get nombre_libro, autor, imagen, precio 
+        #get id_usuario
+        user_acount = session.get('id_usuario')
+        cursor.execute("""SELECT libros.id_libro, libros.nombre_libro, libros.autor, libros.imagen, libros.descripcion, items.cantidad, items.id_item, items.total, costos.precio
+                            FROM libros
+                            INNER JOIN items
+                            INNER JOIN costos
+                            ON libros.id_libro = items.id_libro AND
+                            libros.id_libro = costos.id_libro
+                            WHERE items.id_usuario = %s""", (user_acount))
+        value = cursor.fetchall()
+        #Convertir los datos a formato que se serialice a JSON
+        print("value: ",value)
+        datos = []
+        for fila in value:
+            #eliminar = '<form method="post" id="formEliminar'+str(fila['id_item'])+'" action="../app/desktop/carrito.php"><a href="#" style="color: #cecece;" onclick="document.getElementById("formEliminar'+str(fila['id_item'])+'").submit()"><i class="fas fa-trash-alt"></i></a><input type="hidden" name="accion" value="eliminarCarritoResp"><input type="hidden" name="id_carrito" value="'+str(fila['id_item'])+'"></form>'
+            eliminar = '<a href="#" style="color: #cecece;" onclick="eliminarRegCarrito('+str(fila['id_item'])+')"><i class="fas fa-trash-alt">HOLA</i></a>'
 
+            imagen = "<div class=''><img src='"+fila['imagen']+"' class='img-fluid rounded-3' alt='Shopping item' style='width: 65px;'></div>"
+            #total = fila['cantidad']*fila['precio']
+            datos.append({
+                'libro': imagen,
+                'nombre': fila['nombre_libro'],
+                'autor': fila['autor'],
+                'descripcion': fila['descripcion'],
+                'cantidad': fila['cantidad'],
+                'precio': "$"+str(fila['precio']),
+                'total': "$"+str(fila['total']),
+                'eliminar': eliminar
 
+            })
+        print("DATOS: ",datos)
+    connection.close()
+    return jsonify(datos)
+
+@app.route('/eliminarRegCarrito', methods=['POST'])
+def eliminarRegCarrito():
+    data = request.get_json()
+    id_item = data['id_item']
+
+    connection = get_db_connection()
+    with connection.cursor() as cursor:
+        cursor.execute("""DELETE FROM items WHERE id_item = %s  """, (id_item))
+        connection.commit()
+        connection.close()
+
+    return jsonify({'mensaje': 'Registro Eliminado'})
 
 #@app.route('/admin')
 #def prueba():

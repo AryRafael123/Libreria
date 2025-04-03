@@ -466,7 +466,9 @@ def book_details():
         elif registros[x]['estrellas'] == 1:
             star1 += 1
 
+    #code to fill the stars
 
+        
 
     return render_template('book_details_template.html',client_id=PAYPAL_CLIENT_ID, libros=value, costos=value2, Indice = INDICE, total = TOTAL, opiniones = comentarios , views = reviews, star_1 = star1, star_2 = star2, star_3 = star3, star_4 = star4, star_5 = star5, labels = load_labels())
 

@@ -141,12 +141,13 @@
     
 
     <span class="heading">User Rating</span>
-    <span class="fa fa-star checked"></span>
-    <span class="fa fa-star checked"></span>
-    <span class="fa fa-star checked"></span>
-    <span class="fa fa-star checked"></span>
-    <span class="fa fa-star"></span>
+    <span class="fa fa-star" data-rating="1"></span>
+    <span class="fa fa-star" data-rating="2" ></span>
+    <span class="fa fa-star" data-rating="3" ></span>
+    <span class="fa fa-star" data-rating="4" ></span>
+    <span class="fa fa-star" data-rating="5" ></span>
     <p>{{total}} average based on {{views}} reviews.</p>
+    <input type="hidden" value="{{total}}" id="average" >
     <input type="hidden" value="{{views}}" id="total-views">
     <hr style="border:3px solid #f1f1f1">
 
@@ -313,13 +314,30 @@ var TotalCompras = document.getElementById('NumeroCompras');
     // Event listener to update price in real-time
     amount.addEventListener('input', updateTotalPrice);
 
+
+
     // Initialize total price
     updateTotalPrice();
-
 
 </script>
 
 
+
+<script>
+
+    let average = document.getElementById('average').value;
+  
+     // selected stars
+     let allstars =  document.querySelectorAll('.fa-star');
+            allstars.forEach(star => {
+                if (parseInt(star.getAttribute('data-rating')) <= average) {
+                    star.classList.add('checked');  // Highlight selected stars
+                } else {
+                    star.classList.remove('checked');  // Remove highlight for unselected stars
+                }
+            });
+
+  </script>
 
 
 {% endblock %}

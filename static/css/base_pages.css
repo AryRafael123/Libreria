@@ -352,3 +352,14 @@ margin-top: 10px;
     color: orange;
 }
 
+/*footer*/
+.content {
+    flex: 1; /* Pushes the footer to the bottom */
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}

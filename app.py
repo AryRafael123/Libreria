@@ -8,7 +8,7 @@ from config import Config
 import requests
 import yaml
 import paypalrestsdk
-
+import math
 
 app = Flask(__name__)
 
@@ -131,11 +131,38 @@ def view_index(admin):
 
         connection.close()
     
+    num = (len(values))/5
+    vueltas = math.ceil(num)
+
+
+    #value [] = [{libro1}, {libro2} ,{libro3}, {libro4}, {libro5}, {libro6}]
+    block = [] # [{libro1}, {libro2}, {libro3}, {libro4}, {libro5}]
+    row_list = [] # *[*  [{libro1}, {libro2}, {libro3}, {libro4}, {libro5}], [{libro1}, {libro2}, {libro3}, {libro4}, {libro5}], [{libro1}, {libro2}]  *]*
+   
+   # code to encapsulate books in groups of 5
+    x = 0
+    while x < len(value):
+        if len(block) <= 4:
+            block.append(value[x])
+            if x == len(value)-1:
+                row_list.append(block)
+                block = []
+            else:
+                pass
+            if len(block) == 5:
+                row_list.append(block)
+                block = []
+            else:
+                pass
+        else:
+            pass
+        x+=1
+    
     if admin == True:
         #return url_for('/admin')
         return render_template('index_admin.html', data=value)
     else:
-        return render_template('index_user.html', data=value, labels = load_labels())
+        return render_template('index_user.html', data=value, labels = load_labels(), turns = vueltas, allbooks = row_list )
 
 
 @app.route('/')
@@ -332,6 +359,8 @@ def delete_book():
     #print("ID LIBRO ES  :",IDlibro, "Y ES DE TIPO",type(IDlibro) )
     connection = get_db_connection()
     with connection.cursor() as cursor:
+        cursor.execute("""DELETE FROM Opiniones WHERE id_libro = %s  """, (INDICE))
+        cursor.execute("""DELETE FROM Compras WHERE id_libro = %s  """, (INDICE))
         cursor.execute("""DELETE FROM Libros WHERE id_libro = %s  """, (INDICE))
         connection.commit()
         connection.close()

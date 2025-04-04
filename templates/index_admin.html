@@ -63,7 +63,7 @@
             {% for row in data %}
             {% set ns.contador = ns.contador + 1 %}
             <div class="item position-relative">
-                {% if ns.contador |int < 5 %}
+                {% if ns.contador |int < 6 %} <!--this line is to evaluate the last 4 books as new-->
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-secondary">Nuevo <span class="visually-hidden">unread messages</span></span>
                 {% endif %}
                 <h3>{{row['nombre_libro']}}</h3>
@@ -118,6 +118,7 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>></script>
+    
     <script >
         const toastTrigger = document.getElementById('liveToastBtn')
         const toastLiveExample = document.getElementById('liveToast')
@@ -129,6 +130,7 @@
         })
         }
     </script>
+
     <script>
          document.getElementById('delete-book').addEventListener('click', function() {
         fetch('/delete_book', {

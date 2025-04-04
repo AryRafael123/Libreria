@@ -8,55 +8,67 @@
     </section>
 
     <!--new releases-->
-    <section id="catalog" class="section">
-      <h2>New releases</h2>
-      <div class="catalog-items">
-          {% set ns = namespace(contador=0) %}
-          {% for row in data %}
-          {% set ns.contador = ns.contador + 1 %}
-          <div class="item position-relative">
-              {% if ns.contador |int < 5 %}
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-secondary">Nuevo <span class="visually-hidden">unread messages</span></span>
-              {% endif %}
-              <h3>{{row['nombre_libro']}}</h3>
-              <p>{{row['autor']}}</p>
-              <img id="item-image" src="{{row['imagen']}}" alt="">
+    {% for row in range(turns) %}
+    
+        {% if row < 1 %}    <!--if it is the firs row, the books are news-->
+            <section id="catalog" class="section">
+            <h2>New releases</h2>
+            <div class="catalog-items">
+                {% set ns = namespace(contador=0) %}
+                {% for book in allbooks[row] %}
+                     {% set ns.contador = ns.contador + 1 %}
+                    <div class="item position-relative">
+                        {% if ns.contador |int < 6 %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-secondary">Nuevo <span class="visually-hidden">unread messages</span></span>
+                        {% endif %}
+                        <h3>{{book['nombre_libro']}}</h3>
+                        <p>{{book['autor']}}</p>
+                        <img id="item-image" src="{{book['imagen']}}" alt="">
 
-              <div>
-                <form action="book_details" method="post" class="buy-now-button" >
-                  <input type="hidden" name="id_libro" value="{{ row['id_libro'] }}">
-                  <button type="submit" >{{ labels['buttons']['buy'] }}</button>
-                </form>
-              </div>
+                        <div>
+                            <form action="book_details" method="post" class="buy-now-button" >
+                            <input type="hidden" name="id_libro" value="{{ book['id_libro'] }}">
+                            <button type="submit" >{{ labels['buttons']['buy'] }}</button>
+                            </form>
+                        </div>
+            
+       
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        {% else %}<!-- these books aren't news -->  
+        
+            <section id="catalog" class="section">
+            <h2>Our catalog</h2>
+            <div class="catalog-items">
                 
+                {% for book in allbooks[row] %}
+                    
+                    <div class="item position-relative">
                 
+                        <h3>{{book['nombre_libro']}}</h3>
+                        <p>{{book['autor']}}</p>
+                        <img id="item-image" src="{{book['imagen']}}" alt="">
 
-          </div>
-          {% endfor %}
-      </div>
-  </section>
+                        <div>
+                            <form action="book_details" method="post" class="buy-now-button" >
+                            <input type="hidden" name="id_libro" value="{{ book['id_libro'] }}">
+                            <button type="submit" >{{ labels['buttons']['buy'] }}</button>
+                            </form>
+                        </div>
+            
+    
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
 
-  <!--our catalog-->
-  <section id="catalog" class="section">
-    <h2>Our Catalog</h2>
-    <div class="catalog-items">
-        <div class="item">
-            <h3>Book Title 1</h3>
-            <p>Description of the book.</p>
-            <button>{{ labels['buttons']['buy'] }}</button>
-        </div>
-        <div class="item">
-            <h3>Book Title 2</h3>
-            <p>Description of the book.</p>
-            <button>{{ labels['buttons']['buy'] }}</button>
-        </div>
-        <div class="item">
-            <h3>Book Title 3</h3>
-            <p>Description of the book.</p>
-            <button>{{ labels['buttons']['buy'] }}</button>
-        </div>
-    </div>
-</section>
+        {% endif %} <!-- end if-->
+
+    {% endfor %}
+
 
   {% endblock %}
 

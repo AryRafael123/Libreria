@@ -11,7 +11,7 @@ mycursor = mydb.cursor()
 
 
 
-sql = "INSERT INTO Usuarios (id_usuario, tipo_usuario, nombre, apellido, direccion, teléfono, correo, libros_comprados) VALUES (%s, %s, %s, %s,%s, %s,%s, %s)"
+sql = "INSERT INTO Usuarios (id_usuario, tipo_usuario, nombre, apellido, direccion, teléfono, correo, Libros_comprados) VALUES (%s, %s, %s, %s,%s, %s,%s, %s)"
 
 val = (2, True, "Ary", "Sanchez", "Cuernavaca Morelos", "77712345", "ary@gmail.com", 5)
 mycursor.execute(sql,val)

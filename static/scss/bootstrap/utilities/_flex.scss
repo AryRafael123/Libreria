@@ -28,11 +28,11 @@
     .justify-content#{$infix}-between { justify-content: space-between !important; }
     .justify-content#{$infix}-around  { justify-content: space-around !important; }
 
-    .align-items#{$infix}-start    { align-items: flex-start !important; }
-    .align-items#{$infix}-end      { align-items: flex-end !important; }
-    .align-items#{$infix}-center   { align-items: center !important; }
-    .align-items#{$infix}-baseline { align-items: baseline !important; }
-    .align-items#{$infix}-stretch  { align-items: stretch !important; }
+    .align-Items#{$infix}-start    { align-Items: flex-start !important; }
+    .align-Items#{$infix}-end      { align-Items: flex-end !important; }
+    .align-Items#{$infix}-center   { align-Items: center !important; }
+    .align-Items#{$infix}-baseline { align-Items: baseline !important; }
+    .align-Items#{$infix}-stretch  { align-Items: stretch !important; }
 
     .align-content#{$infix}-start   { align-content: flex-start !important; }
     .align-content#{$infix}-end     { align-content: flex-end !important; }

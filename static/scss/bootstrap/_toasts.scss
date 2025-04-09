@@ -1,6 +1,6 @@
 .toast {
   max-width: $toast-max-width;
-  overflow: hidden; // cheap rounded corners on nested items
+  overflow: hidden; // cheap rounded corners on nested Items
   @include font-size($toast-font-size);
   color: $toast-color;
   background-color: $toast-background-color;
@@ -31,7 +31,7 @@
 
 .toast-header {
   display: flex;
-  align-items: center;
+  align-Items: center;
   padding: $toast-padding-y $toast-padding-x;
   color: $toast-header-color;
   background-color: $toast-header-background-color;

@@ -8,7 +8,7 @@
   position: relative;
   display: flex;
   flex-wrap: wrap; // For form validation feedback
-  align-items: stretch;
+  align-Items: stretch;
   width: 100%;
 
   > .form-control,
@@ -51,7 +51,7 @@
   // border-radius overrides.
   > .custom-file {
     display: flex;
-    align-items: center;
+    align-Items: center;
 
     &:not(:last-child) .custom-file-label,
     &:not(:last-child) .custom-file-label::after { @include border-right-radius(0); }
@@ -101,7 +101,7 @@
 
 .input-group-text {
   display: flex;
-  align-items: center;
+  align-Items: center;
   padding: $input-padding-y $input-padding-x;
   margin-bottom: 0; // Allow use of <label> elements by overriding our default margin-bottom
   @include font-size($input-font-size); // Match inputs

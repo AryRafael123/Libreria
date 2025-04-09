@@ -12,13 +12,13 @@ CREATE TABLE Usuarios (
 			teléfono VARCHAR(50),
 			correo VARCHAR(50) UNIQUE,
 			contraseña VARCHAR(50),
-			libros_comprados INT
+			Libros_comprados INT
 
 );
  
 CREATE TABLE Compras(
 			id_compra INT AUTO_INCREMENT PRIMARY KEY,
-			libros_comprados VARCHAR(50),
+			Libros_comprados VARCHAR(50),
 			total DOUBLE
 );
 
@@ -36,7 +36,7 @@ CREATE TABLE Libros(
             descripcion VARCHAR(50)
 );
 
-CREATE TABLE Estado_libros(
+CREATE TABLE Estado_Libros(
 			id_estado INT AUTO_INCREMENT PRIMARY KEY,
 			disponible BOOLEAN,
 			no_disponible BOOLEAN
@@ -87,11 +87,11 @@ ADD CONSTRAINT fk_Libros_Precio FOREIGN KEY (id_precio)
 REFERENCES Costos (id_precio)
 ON DELETE CASCADE;
 
-ALTER TABLE Estado_libros
+ALTER TABLE Estado_Libros
 ADD COLUMN id_libro INT;
 
-ALTER TABLE Estado_libros
-ADD CONSTRAINT fk_Estadolibros_Libro FOREIGN KEY (id_libro)
+ALTER TABLE Estado_Libros
+ADD CONSTRAINT fk_EstadoLibros_Libro FOREIGN KEY (id_libro)
 REFERENCES Libros (id_libro);
 
 

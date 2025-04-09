@@ -49,6 +49,8 @@ function mostrarLibroAdmin(){
     });
 }
 
+
+
 function editarLibro(id_libro){
     console.log("editarLibro")
 

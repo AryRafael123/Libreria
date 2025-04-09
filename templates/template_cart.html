@@ -9,13 +9,13 @@
 <!-- cart no empty-->
 {% if cart == True %}
 
-<!-- buton to buy all the items-->
+<!-- buton to buy all the Items-->
 <div class="button-buy-cart">
-  <button id="bookID"  value=""   type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#buy-items" >Buy items</button> 
+  <button id="bookID"  value=""   type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#buy-Items" >Buy Items</button> 
 </div>
 
 <!--modal to confirm-->
-<div class="modal fade" id="buy-items" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="buy-Items" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
   <div class="modal-content">
       <div class="modal-header">
@@ -27,11 +27,11 @@
         <hr>
         <p> <strong> ${{ total_price }}</strong> </p>
 
-        <form action="buy_items">
+        <form action="buy_Items">
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button id="myForm"  type="submit" class="btn btn-primary" >Buy items</button>
+                <button id="myForm"  type="submit" class="btn btn-primary" >Buy Items</button>
             </div>
 
         </form>
@@ -42,7 +42,7 @@
   </div>
 </div>
 
-<!--section to show all the items in the cart-->
+<!--section to show all the Items in the cart-->
 <section id="catalog" class="section">
 
     <main>
@@ -93,7 +93,7 @@
 
     <section id="home" class="section">
       <h2>Your cart looks empty</h2>
-      <p>Add things to your cart to see the items you've added.</p>
+      <p>Add things to your cart to see the Items you've added.</p>
     </section>
 
        

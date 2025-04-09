@@ -13,7 +13,7 @@
         {% if row < 1 %}    <!--if it is the firs row, the books are news-->
             <section id="catalog" class="section">
             <h2>New releases</h2>
-            <div class="catalog-items">
+            <div class="catalog-Items">
                 {% set ns = namespace(contador=0) %}
                 {% for book in allbooks[row] %}
                      {% set ns.contador = ns.contador + 1 %}
@@ -42,7 +42,7 @@
         
             <section id="catalog" class="section">
             <h2>Our catalog</h2>
-            <div class="catalog-items">
+            <div class="catalog-Items">
                 
                 {% for book in allbooks[row] %}
                     

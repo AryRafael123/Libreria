@@ -18,7 +18,7 @@ header {
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-Items: center;
 }
 
 header .logo h1 {
@@ -57,13 +57,13 @@ h2 {
     margin-bottom: 1rem;
 }
 
-.catalog-items {
+.catalog-Items {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
 }
 
-.catalog-items .item {
+.catalog-Items .item {
     background-color: #fff;
     padding: 1rem;
     border-radius: 8px;
@@ -71,13 +71,13 @@ h2 {
     width: 30%;
 }
 
-.catalog-items .item .form-buttons{
+.catalog-Items .item .form-buttons{
     display: flex;
     height: auto;
     
 }
 
-.catalog-items .item form button {
+.catalog-Items .item form button {
     width: 20%;
     background-color: #007bff;
     color: white;
@@ -88,7 +88,7 @@ h2 {
     margin-top: 10px;
 }
 
-.catalog-items .item button:hover {
+.catalog-Items .item button:hover {
     background-color: #0056b3;
 }
 

@@ -93,13 +93,13 @@ def display_cart():
     connection = get_db_connection()
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM Items """)
-        items = cursor.fetchall() 
+        Items = cursor.fetchall() 
         connection.commit()  # Commit changes to the database
     connection.close()
 
 
-    if items:
-        return jsonify(items)
+    if Items:
+        return jsonify(Items)
     else:
         return jsonify({"error": "User not found"}), 404
 
@@ -119,9 +119,9 @@ app.secret_key = binascii.hexlify(os.urandom(24)).decode() # Necesario para usar
 #MySQL connection settings
 def get_db_connection():
     connection = pymysql.connect(
-        host='127.0.0.1',
+        host='libreria.cit0xrarrrli.us-east-1.rds.amazonaws.com',
         user='root',
-        password='mysqlpassword123',
+        password='Libreria2025',
         db='libreria',
         cursorclass=pymysql.cursors.DictCursor  # To get results as dictionaries
     )
@@ -131,7 +131,7 @@ def get_db_connection():
 def view_index(admin):
     connection = get_db_connection()
     with connection.cursor() as cursor:
-        cursor.execute('SELECT * FROM libros ORDER by id_libro DESC')
+        cursor.execute('SELECT * FROM Libros ORDER by id_libro DESC')
         values = cursor.fetchall()
         
         value = []
@@ -368,7 +368,7 @@ def template_edit_user():
     connection = get_db_connection()
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM Usuarios WHERE id_usuario = %s  """, (user_id))
-        value = cursor.fetchone() # {'id_usuario': 1, 'tipo_usuario': 0, 'nombre': 'Ary Rafael', 'apellido': 'Sánchez Hernández', 'nombre_usuario': 'Ary123', 'direccion': 'Morelos', 'teléfono': '7775955444', 'correo': '20223tn078@utez.edu.mx', 'contraseña': 'ary12345', 'libros_comprados': None, 'id_opinion': None}
+        value = cursor.fetchone() # {'id_usuario': 1, 'tipo_usuario': 0, 'nombre': 'Ary Rafael', 'apellido': 'Sánchez Hernández', 'nombre_usuario': 'Ary123', 'direccion': 'Morelos', 'teléfono': '7775955444', 'correo': '20223tn078@utez.edu.mx', 'contraseña': 'ary12345', 'Libros_comprados': None, 'id_opinion': None}
         connection.commit()
     connection.close()
 
@@ -494,7 +494,7 @@ def book_details():
         value = cursor.fetchone()
         cursor.execute("""SELECT * FROM Costos WHERE id_libro = %s  """, (INDICE))
         value2 = cursor.fetchone()
-
+        print("COSTOS ",value2)
         cursor.execute("""SELECT * FROM Opiniones WHERE id_libro = %s  """, (INDICE))
         value4 = cursor.fetchall()
 
@@ -543,7 +543,7 @@ def book_details():
 
 
 
-    return render_template('book_details_template.html',client_id=PAYPAL_CLIENT_ID, libros=value, costos=value2, Indice = INDICE, total = TOTAL, opiniones = comentarios , views = reviews, star_1 = star1, star_2 = star2, star_3 = star3, star_4 = star4, star_5 = star5, labels = load_labels())
+    return render_template('book_details_template.html',client_id=PAYPAL_CLIENT_ID, Libros=value, Costos=value2, Indice = INDICE, total = TOTAL, Opiniones = comentarios , views = reviews, star_1 = star1, star_2 = star2, star_3 = star3, star_4 = star4, star_5 = star5, labels = load_labels())
 
 
 @app.route('/buy_book', methods=['POST'])
@@ -554,7 +554,7 @@ def buy_book():
 
     connection = get_db_connection()
     with connection.cursor() as cursor:
-        #Substrac from libros stock
+        #Substrac from Libros stock
         cursor.execute("""SELECT stock FROM Libros WHERE id_libro = %s  """, (INDICE))
         value = cursor.fetchone()
         new_stock = value['stock'] - amount
@@ -591,30 +591,30 @@ def buy_book():
                     pass
     
         if Book == False: # the book is not in Compras table
-            cursor.execute('INSERT INTO Compras (libros_comprados,total, id_usuario, id_libro) VALUES (%s,%s,%s,%s)',(amount,bookprice ,userID, INDICE))
+            cursor.execute('INSERT INTO Compras (Libros_comprados,total, id_usuario, id_libro) VALUES (%s,%s,%s,%s)',(amount,bookprice ,userID, INDICE))
         else: #we update the table
-            cursor.execute("""SELECT libros_comprados FROM Compras WHERE id_libro = %s  """, (INDICE))
+            cursor.execute("""SELECT Libros_comprados FROM Compras WHERE id_libro = %s  """, (INDICE))
             books_purchased = cursor.fetchone()
-            purchasedBooks = int(books_purchased.get('libros_comprados'))
+            purchasedBooks = int(books_purchased.get('Libros_comprados'))
             purchasedBooks += amount # we get all the purchased books
             cursor.execute("""SELECT total FROM Compras WHERE id_usuario = %s  """, (userID))
             TOTAL = cursor.fetchone()
             x = TOTAL.get('precio')
             total = book_price + amount*(int(price.get('precio'))) 
-            cursor.execute ("""UPDATE Compras SET libros_comprados=%s,total=%s WHERE id_usuario=%s""", (purchasedBooks,total,userID))
+            cursor.execute ("""UPDATE Compras SET Libros_comprados=%s,total=%s WHERE id_usuario=%s""", (purchasedBooks,total,userID))
 
 
         #add one purchase to the user
-        cursor.execute("""SELECT libros_comprados FROM Usuarios WHERE correo = %s  """, (user_acount))
+        cursor.execute("""SELECT Libros_comprados FROM Usuarios WHERE correo = %s  """, (user_acount))
         value = cursor.fetchone()
 
-        if value.get('libros_comprados') == None:
+        if value.get('Libros_comprados') == None:
             x = amount
-            cursor.execute ("""UPDATE Usuarios SET libros_comprados = %s WHERE id_usuario=%s""", (x, userID))
+            cursor.execute ("""UPDATE Usuarios SET Libros_comprados = %s WHERE id_usuario=%s""", (x, userID))
         else:
-            x = int(value.get('libros_comprados'))
+            x = int(value.get('Libros_comprados'))
             x += amount
-            cursor.execute ("""UPDATE Usuarios SET libros_comprados = %s WHERE id_usuario=%s""", (x, userID))
+            cursor.execute ("""UPDATE Usuarios SET Libros_comprados = %s WHERE id_usuario=%s""", (x, userID))
 
         cursor.execute("""SELECT id_usuario FROM Usuarios WHERE correo = %s  """, (user_acount))
         value = cursor.fetchone()
@@ -644,7 +644,7 @@ def buy_book():
 
 @app.route('/template_add_cart')
 def template_add_cart():
-    #get items from the cart and send them to template_cart.html
+    #get Items from the cart and send them to template_cart.html
     connection = get_db_connection()
     with connection.cursor() as cursor:
 
@@ -652,13 +652,13 @@ def template_add_cart():
         #get id_usuario
         
         user_acount = session.get('id_usuario')
-        cursor.execute("""SELECT libros.id_libro, libros.nombre_libro, libros.autor, libros.imagen, libros.descripcion, items.cantidad, items.id_item, items.total, costos.precio
-                            FROM libros
-                            INNER JOIN items
-                            INNER JOIN costos
-                            ON libros.id_libro = items.id_libro AND
-                            libros.id_libro = costos.id_libro
-                            WHERE items.id_usuario = %s""", (user_acount))
+        cursor.execute("""SELECT Libros.id_libro, Libros.nombre_libro, Libros.autor, Libros.imagen, Libros.descripcion, Items.cantidad, Items.id_item, Items.total, Costos.precio
+                            FROM Libros
+                            INNER JOIN Items
+                            INNER JOIN Costos
+                            ON Libros.id_libro = Items.id_libro AND
+                            Libros.id_libro = Costos.id_libro
+                            WHERE Items.id_usuario = %s""", (user_acount))
         value = cursor.fetchall()
 
         prices = 0
@@ -684,7 +684,7 @@ def add_cart():
     INDICE = int(request.form['id_libro'])
     amount = int(request.form.get('NumeroCarrito'))
 
-    print("COMPRAS : ",amount)
+    print("Compras : ",amount)
 
     connection = get_db_connection()
     with connection.cursor() as cursor:
@@ -699,7 +699,7 @@ def add_cart():
         total = precio*amount
 
         #Validación que no permitirá que se agrega un nuevo registro si ya existe, solo actualizará el valor
-        cursor.execute("SELECT * FROM items WHERE id_libro = %s AND id_usuario = %s", (INDICE, int(userID)))
+        cursor.execute("SELECT * FROM Items WHERE id_libro = %s AND id_usuario = %s", (INDICE, int(userID)))
         value3 = cursor.fetchone()
 
         print("CONTEO:")
@@ -710,7 +710,7 @@ def add_cart():
         if value3 is not None:
             cantidad = int(value3.get('cantidad')) + amount
             totalPrecio = cantidad*precio
-            cursor.execute ("""UPDATE items SET cantidad = %s, total = %s  WHERE id_item=%s""", (cantidad, totalPrecio, value3.get('id_item')))
+            cursor.execute ("""UPDATE Items SET cantidad = %s, total = %s  WHERE id_item=%s""", (cantidad, totalPrecio, value3.get('id_item')))
         else:
             #insert into Items
             cursor.execute('INSERT INTO Items (id_usuario,cantidad,id_libro,id_precio,total) VALUES (%s,%s,%s,%s,%s)',(userID,amount,INDICE,priceID,total))
@@ -720,8 +720,8 @@ def add_cart():
 
     return book_details()
 
-@app.route('/buy_items')
-def buy_items():
+@app.route('/buy_Items')
+def buy_Items():
     connection = get_db_connection()
     with connection.cursor() as cursor:
 
@@ -730,7 +730,7 @@ def buy_items():
         cursor.execute("""SELECT id_usuario FROM Usuarios WHERE correo = %s  """, (user_acount))
         value = cursor.fetchone()
         userID = value.get('id_usuario')
-        #get id_libros
+        #get id_Libros
         cursor.execute("""SELECT id_libro FROM Items WHERE id_usuario = %s  """, (userID))
         booksIDS = cursor.fetchall() #BOOKSIDS ==  [{'id_libro': 2}, {'id_libro': 1}]
 
@@ -749,21 +749,21 @@ def buy_items():
             prices.append(books_prices) # [[{'precio': 500.0}], [{'precio': 800.0}]]
     
         #record the purchases
-        for x in range(0,len(booksIDS)):#                                                                                     libros comprados              total a pagar por libro                usuario      id libro
-            cursor.execute('INSERT INTO Compras (libros_comprados, total, id_usuario, id_libro) VALUES (%s,%s,%s,%s)',(AmountPerBook[x][0]['cantidad'],(prices[x][0]['precio'])*(AmountPerBook[x][0]['cantidad']) ,userID, booksIDS[x]['id_libro']))
+        for x in range(0,len(booksIDS)):#                                                                                     Libros comprados              total a pagar por libro                usuario      id libro
+            cursor.execute('INSERT INTO Compras (Libros_comprados, total, id_usuario, id_libro) VALUES (%s,%s,%s,%s)',(AmountPerBook[x][0]['cantidad'],(prices[x][0]['precio'])*(AmountPerBook[x][0]['cantidad']) ,userID, booksIDS[x]['id_libro']))
 
         #add purchases to the user
-        cursor.execute("""SELECT libros_comprados FROM Usuarios WHERE correo = %s  """, (user_acount))
+        cursor.execute("""SELECT Libros_comprados FROM Usuarios WHERE correo = %s  """, (user_acount))
         value = cursor.fetchone()
-        if value.get('libros_comprados') == None:
+        if value.get('Libros_comprados') == None:
             z = 0
             for x in range(0,len(booksIDS)):
                 z += AmountPerBook[x][0]['cantidad']
-            cursor.execute ("""UPDATE Usuarios SET libros_comprados = %s WHERE id_usuario=%s""", (z, userID))
+            cursor.execute ("""UPDATE Usuarios SET Libros_comprados = %s WHERE id_usuario=%s""", (z, userID))
         else:
-            z = int(value.get('libros_comprados'))
+            z = int(value.get('Libros_comprados'))
             z += AmountPerBook[x][0]['cantidad']
-            cursor.execute ("""UPDATE Usuarios SET libros_comprados = %s WHERE id_usuario=%s""", (z, userID))
+            cursor.execute ("""UPDATE Usuarios SET Libros_comprados = %s WHERE id_usuario=%s""", (z, userID))
 
         #delete records from Items
         for x in range(0,len(booksIDS)):
@@ -814,10 +814,10 @@ def template_purchases():
 
         #send the times the user had purchased the book
         amount = []
-        cursor.execute("""SELECT libros_comprados FROM Compras""")
+        cursor.execute("""SELECT Libros_comprados FROM Compras""")
         values = cursor.fetchall()
         for x in range(0,len(values)):
-            amount.append(int(values[x]['libros_comprados'])) # amount = [12,13,14,...]
+            amount.append(int(values[x]['Libros_comprados'])) # amount = [12,13,14,...]
         print("AMOUNT LIST = ",amount)
     
     return render_template('template_purchases.html',labels = load_labels(), BOOKS = books, rango = rango, list_amount = amount) 
@@ -848,7 +848,7 @@ def book_rating():
         for x in range(0,len(opinions)):
             lista.append(opinions[x]['id_usuario'])
 
-        print("LISTA DE LOS IDS DE USUARIOS  == ",lista)
+        print("LISTA DE LOS IDS DE Usuarios  == ",lista)
     
         if userID in lista: # the user had already voted
             cursor.execute ("""UPDATE Opiniones SET estrellas = %s, comentario = %s  WHERE id_libro=%s""", (rating, comentario, INDICE))
@@ -871,13 +871,13 @@ def mostrarCarrito():
         #get nombre_libro, autor, imagen, precio 
         #get id_usuario
         user_acount = session.get('id_usuario')
-        cursor.execute("""SELECT libros.id_libro, libros.nombre_libro, libros.autor, libros.imagen, libros.descripcion, items.cantidad, items.id_item, items.total, costos.precio
-                            FROM libros
-                            INNER JOIN items
-                            INNER JOIN costos
-                            ON libros.id_libro = items.id_libro AND
-                            libros.id_libro = costos.id_libro
-                            WHERE items.id_usuario = %s""", (user_acount))
+        cursor.execute("""SELECT Libros.id_libro, Libros.nombre_libro, Libros.autor, Libros.imagen, Libros.descripcion, Items.cantidad, Items.id_item, Items.total, Costos.precio
+                            FROM Libros
+                            INNER JOIN Items
+                            INNER JOIN Costos
+                            ON Libros.id_libro = Items.id_libro AND
+                            Libros.id_libro = Costos.id_libro
+                            WHERE Items.id_usuario = %s""", (user_acount))
         value = cursor.fetchall()
         #Convertir los datos a formato que se serialice a JSON
         datos = []
@@ -909,7 +909,7 @@ def eliminarRegCarrito():
 
     connection = get_db_connection()
     with connection.cursor() as cursor:
-        cursor.execute("""DELETE FROM items WHERE id_item = %s  """, (id_item))
+        cursor.execute("""DELETE FROM Items WHERE id_item = %s  """, (id_item))
         connection.commit()
         connection.close()
 
@@ -928,17 +928,17 @@ def comprarLibro():
     connection = get_db_connection()
     with connection.cursor() as cursor:
         cursor.execute("""SELECT precio, stock
-                            FROM libros
-                            INNER JOIN costos ON
-                            libros.id_libro = costos.id_libro
-                            WHERE costos.id_libro = %s""", (data['id_libro']))
-        #cursor.execute("""SELECT precio FROM costos WHERE id_libro = %s  """, (data['id_libro']))
+                            FROM Libros
+                            INNER JOIN Costos ON
+                            Libros.id_libro = Costos.id_libro
+                            WHERE Costos.id_libro = %s""", (data['id_libro']))
+        #cursor.execute("""SELECT precio FROM Costos WHERE id_libro = %s  """, (data['id_libro']))
         value = cursor.fetchone()
         precio = value.get('precio')
         cant = int(data['cantidad'])
         total = cant*precio
 
-        cursor.execute('INSERT INTO compras (libros_comprados,total,id_usuario,id_libro) VALUES (%s,%s,%s,%s)',(data['cantidad'],total,id_usuario,data['id_libro']))
+        cursor.execute('INSERT INTO Compras (Libros_comprados,total,id_usuario,id_libro) VALUES (%s,%s,%s,%s)',(data['cantidad'],total,id_usuario,data['id_libro']))
 
         nuevoStock = value.get('stock')-cant
 
@@ -946,7 +946,7 @@ def comprarLibro():
         print("PRECIOOOOOOO: ", precio)
         print("NUEVOSTOCK: ", nuevoStock)
         print("ID_LIBROOO: ", data['id_libro'])  
-        cursor.execute ("""UPDATE libros SET stock = %s WHERE id_libro=%s""", (nuevoStock, data['id_libro']))
+        cursor.execute ("""UPDATE Libros SET stock = %s WHERE id_libro=%s""", (nuevoStock, data['id_libro']))
         connection.commit()
     connection.close()
 
@@ -1041,10 +1041,10 @@ def mostrarLibroAdmin():
         #get nombre_libro, autor, imagen, precio 
         #get id_usuario
         user_acount = session.get('id_usuario')
-        cursor.execute("""SELECT libros.id_libro, libros.nombre_libro, libros.autor, libros.editorial, libros.stock, libros.descripcion, costos.precio
-                            FROM libros 
-                            INNER JOIN costos ON 
-                            libros.id_libro = costos.id_libro""")
+        cursor.execute("""SELECT Libros.id_libro, Libros.nombre_libro, Libros.autor, Libros.editorial, Libros.stock, Libros.descripcion, Costos.precio
+                            FROM Libros 
+                            INNER JOIN Costos ON 
+                            Libros.id_libro = Costos.id_libro""")
         value = cursor.fetchall()
         #Convertir los datos a formato que se serialice a JSON
         datos = []
@@ -1065,6 +1065,7 @@ def mostrarLibroAdmin():
             })
 
     connection.close()
+    print(datos)
     return jsonify(datos)
 
 #@app.route('/admin')

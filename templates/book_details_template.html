@@ -51,24 +51,24 @@
               
 
                 <div class="book-image">
-                    <img src="{{ libros.imagen }}"  alt="Book Cover">
+                    <img src="{{ Libros.imagen }}"  alt="Book Cover">
                 </div>
 
                 <div class="book-info">
-                <h2>{{ libros.nombre_libro }}</h2>    
-                <h3>Author: {{ libros.autor }} </h3>
-                <h3>Editorial: {{ libros.editorial }}</h3>
-                <h4>Available: {{ libros.stock }} </h4>
-                  <p><strong>Price: $</strong> {{ costos.precio }} </p>
+                <h2>{{ Libros.nombre_libro }}</h2>    
+                <h3>Author: {{ Libros.autor }} </h3>
+                <h3>Editorial: {{ Libros.editorial }}</h3>
+                <h4>Available: {{ Libros.stock }} </h4>
+                  <p><strong>Price: $</strong> {{ Costos.precio }} </p>
                   <p><strong>Description:</strong></p>
-                  <p>{{ libros.descripcion }}</p>
+                  <p>{{ Libros.descripcion }}</p>
 
                   <div class="amount">
                     
                         <label for="cantidad">Amount:</label>
                         <input type="hidden" name="id_libro" value="{{Indice}}" id="id_libro">
-                        <input type="number" id="cantidad" name="cantidad" min="1" max="{{libros.stock}}" value="1" required> <!-- cantidad-->
-                        <input type="hidden" value = "{{costos.precio}}" id="Precio" > <!-- precio -->
+                        <input type="number" id="cantidad" name="cantidad" min="1" max="{{Libros.stock}}" value="1" required> <!-- cantidad-->
+                        <input type="hidden" value = "{{Costos.precio}}" id="Precio" > <!-- precio -->
                                          
                   </div>
                   
@@ -95,7 +95,7 @@
                     <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">{{ libros.nombre_libro }} </h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">{{ Libros.nombre_libro }} </h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -122,7 +122,7 @@
                     <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">{{ libros.nombre_libro }} </h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">{{ Libros.nombre_libro }} </h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">

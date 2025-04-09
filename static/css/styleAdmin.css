@@ -2501,7 +2501,7 @@ textarea.form-control-lg {
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  align-items: stretch;
+  align-Items: stretch;
   width: 100%;
 }
 .input-group > .form-control, .input-group > .datatable-input,
@@ -2529,7 +2529,7 @@ textarea.form-control-lg {
 
 .input-group-text {
   display: flex;
-  align-items: center;
+  align-Items: center;
   padding: 0.375rem 0.75rem;
   font-size: 1rem;
   font-weight: 400;
@@ -3599,7 +3599,7 @@ textarea.form-control-lg {
 
 .btn-group-vertical {
   flex-direction: column;
-  align-items: flex-start;
+  align-Items: flex-start;
   justify-content: center;
 }
 .btn-group-vertical > .btn,
@@ -3766,7 +3766,7 @@ textarea.form-control-lg {
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-Items: center;
   justify-content: space-between;
   padding: var(--bs-navbar-padding-y) var(--bs-navbar-padding-x);
 }
@@ -3779,7 +3779,7 @@ textarea.form-control-lg {
 .navbar > .container-xxl {
   display: flex;
   flex-wrap: inherit;
-  align-items: center;
+  align-Items: center;
   justify-content: space-between;
 }
 .navbar-brand {
@@ -3830,7 +3830,7 @@ textarea.form-control-lg {
 .navbar-collapse {
   flex-basis: 100%;
   flex-grow: 1;
-  align-items: center;
+  align-Items: center;
 }
 
 .navbar-toggler {
@@ -4375,7 +4375,7 @@ textarea.form-control-lg {
 .accordion-button {
   position: relative;
   display: flex;
-  align-items: center;
+  align-Items: center;
   width: 100%;
   padding: var(--bs-accordion-btn-padding-y) var(--bs-accordion-btn-padding-x);
   font-size: 1rem;
@@ -5230,7 +5230,7 @@ textarea.form-control-lg {
 
 .toast-header {
   display: flex;
-  align-items: center;
+  align-Items: center;
   padding: var(--bs-toast-padding-y) var(--bs-toast-padding-x);
   color: var(--bs-toast-header-color);
   background-color: var(--bs-toast-header-bg);
@@ -5318,7 +5318,7 @@ textarea.form-control-lg {
 
 .modal-dialog-centered {
   display: flex;
-  align-items: center;
+  align-Items: center;
   min-height: calc(100% - var(--bs-modal-margin) * 2);
 }
 
@@ -5358,7 +5358,7 @@ textarea.form-control-lg {
 .modal-header {
   display: flex;
   flex-shrink: 0;
-  align-items: center;
+  align-Items: center;
   justify-content: space-between;
   padding: var(--bs-modal-header-padding);
   border-bottom: var(--bs-modal-header-border-width) solid var(--bs-modal-header-border-color);
@@ -5385,7 +5385,7 @@ textarea.form-control-lg {
   display: flex;
   flex-shrink: 0;
   flex-wrap: wrap;
-  align-items: center;
+  align-Items: center;
   justify-content: flex-end;
   padding: calc(var(--bs-modal-padding) - var(--bs-modal-footer-gap) * 0.5);
   background-color: var(--bs-modal-footer-bg);
@@ -5882,7 +5882,7 @@ textarea.form-control-lg {
   bottom: 0;
   z-index: 1;
   display: flex;
-  align-items: center;
+  align-Items: center;
   justify-content: center;
   width: 15%;
   padding: 0;
@@ -6595,7 +6595,7 @@ textarea.form-control-lg {
 
 .offcanvas-header {
   display: flex;
-  align-items: center;
+  align-Items: center;
   justify-content: space-between;
   padding: var(--bs-offcanvas-padding-y) var(--bs-offcanvas-padding-x);
 }
@@ -6891,7 +6891,7 @@ textarea.form-control-lg {
 .hstack {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-Items: center;
   align-self: stretch;
 }
 
@@ -7409,24 +7409,24 @@ textarea.form-control-lg {
   justify-content: space-evenly !important;
 }
 
-.align-items-start {
-  align-items: flex-start !important;
+.align-Items-start {
+  align-Items: flex-start !important;
 }
 
-.align-items-end {
-  align-items: flex-end !important;
+.align-Items-end {
+  align-Items: flex-end !important;
 }
 
-.align-items-center {
-  align-items: center !important;
+.align-Items-center {
+  align-Items: center !important;
 }
 
-.align-items-baseline {
-  align-items: baseline !important;
+.align-Items-baseline {
+  align-Items: baseline !important;
 }
 
-.align-items-stretch {
-  align-items: stretch !important;
+.align-Items-stretch {
+  align-Items: stretch !important;
 }
 
 .align-content-start {
@@ -8409,20 +8409,20 @@ textarea.form-control-lg {
   .justify-content-sm-evenly {
     justify-content: space-evenly !important;
   }
-  .align-items-sm-start {
-    align-items: flex-start !important;
+  .align-Items-sm-start {
+    align-Items: flex-start !important;
   }
-  .align-items-sm-end {
-    align-items: flex-end !important;
+  .align-Items-sm-end {
+    align-Items: flex-end !important;
   }
-  .align-items-sm-center {
-    align-items: center !important;
+  .align-Items-sm-center {
+    align-Items: center !important;
   }
-  .align-items-sm-baseline {
-    align-items: baseline !important;
+  .align-Items-sm-baseline {
+    align-Items: baseline !important;
   }
-  .align-items-sm-stretch {
-    align-items: stretch !important;
+  .align-Items-sm-stretch {
+    align-Items: stretch !important;
   }
   .align-content-sm-start {
     align-content: flex-start !important;
@@ -8905,20 +8905,20 @@ textarea.form-control-lg {
   .justify-content-md-evenly {
     justify-content: space-evenly !important;
   }
-  .align-items-md-start {
-    align-items: flex-start !important;
+  .align-Items-md-start {
+    align-Items: flex-start !important;
   }
-  .align-items-md-end {
-    align-items: flex-end !important;
+  .align-Items-md-end {
+    align-Items: flex-end !important;
   }
-  .align-items-md-center {
-    align-items: center !important;
+  .align-Items-md-center {
+    align-Items: center !important;
   }
-  .align-items-md-baseline {
-    align-items: baseline !important;
+  .align-Items-md-baseline {
+    align-Items: baseline !important;
   }
-  .align-items-md-stretch {
-    align-items: stretch !important;
+  .align-Items-md-stretch {
+    align-Items: stretch !important;
   }
   .align-content-md-start {
     align-content: flex-start !important;
@@ -9401,20 +9401,20 @@ textarea.form-control-lg {
   .justify-content-lg-evenly {
     justify-content: space-evenly !important;
   }
-  .align-items-lg-start {
-    align-items: flex-start !important;
+  .align-Items-lg-start {
+    align-Items: flex-start !important;
   }
-  .align-items-lg-end {
-    align-items: flex-end !important;
+  .align-Items-lg-end {
+    align-Items: flex-end !important;
   }
-  .align-items-lg-center {
-    align-items: center !important;
+  .align-Items-lg-center {
+    align-Items: center !important;
   }
-  .align-items-lg-baseline {
-    align-items: baseline !important;
+  .align-Items-lg-baseline {
+    align-Items: baseline !important;
   }
-  .align-items-lg-stretch {
-    align-items: stretch !important;
+  .align-Items-lg-stretch {
+    align-Items: stretch !important;
   }
   .align-content-lg-start {
     align-content: flex-start !important;
@@ -9897,20 +9897,20 @@ textarea.form-control-lg {
   .justify-content-xl-evenly {
     justify-content: space-evenly !important;
   }
-  .align-items-xl-start {
-    align-items: flex-start !important;
+  .align-Items-xl-start {
+    align-Items: flex-start !important;
   }
-  .align-items-xl-end {
-    align-items: flex-end !important;
+  .align-Items-xl-end {
+    align-Items: flex-end !important;
   }
-  .align-items-xl-center {
-    align-items: center !important;
+  .align-Items-xl-center {
+    align-Items: center !important;
   }
-  .align-items-xl-baseline {
-    align-items: baseline !important;
+  .align-Items-xl-baseline {
+    align-Items: baseline !important;
   }
-  .align-items-xl-stretch {
-    align-items: stretch !important;
+  .align-Items-xl-stretch {
+    align-Items: stretch !important;
   }
   .align-content-xl-start {
     align-content: flex-start !important;
@@ -10393,20 +10393,20 @@ textarea.form-control-lg {
   .justify-content-xxl-evenly {
     justify-content: space-evenly !important;
   }
-  .align-items-xxl-start {
-    align-items: flex-start !important;
+  .align-Items-xxl-start {
+    align-Items: flex-start !important;
   }
-  .align-items-xxl-end {
-    align-items: flex-end !important;
+  .align-Items-xxl-end {
+    align-Items: flex-end !important;
   }
-  .align-items-xxl-center {
-    align-items: center !important;
+  .align-Items-xxl-center {
+    align-Items: center !important;
   }
-  .align-items-xxl-baseline {
-    align-items: baseline !important;
+  .align-Items-xxl-baseline {
+    align-Items: baseline !important;
   }
-  .align-items-xxl-stretch {
-    align-items: stretch !important;
+  .align-Items-xxl-stretch {
+    align-Items: stretch !important;
   }
   .align-content-xxl-start {
     align-content: flex-start !important;
@@ -10993,7 +10993,7 @@ body {
 }
 .sb-sidenav .sb-sidenav-menu .nav .nav-link {
   display: flex;
-  align-items: center;
+  align-Items: center;
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
   position: relative;

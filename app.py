@@ -349,7 +349,19 @@ def ADD_USER():
 @app.route('/template_edit_user')
 def template_edit_user():
 
-    return render_template('edit_user.html')
+    #we send the values of the user 
+    user_id = session.get('id_usuario') 
+
+    connection = get_db_connection()
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM Usuarios WHERE id_usuario = %s  """, (user_id))
+        value = cursor.fetchone()
+        print("this is the valueeeeee ",value)
+        connection.commit()
+    connection.close()
+
+
+    return render_template('edit_user.html', labels = load_labels(), data = value)
 
 @app.route('/edit_user', methods=['POST'])
 def EDIT_USER():
@@ -891,6 +903,7 @@ def eliminarRegCarrito():
 
     return jsonify({'mensaje': 'Registro Eliminado'})
 
+
 #this function is used with the paypal button
 @app.route('/comprarLibro', methods=['POST'])
 def comprarLibro():
@@ -925,14 +938,78 @@ def comprarLibro():
         connection.commit()
     connection.close()
 
-    
+    #mail code
+    # HTML email body with inline CSS for a nice design
+    html_body = f"""
+    <html>
+        <head>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f9;
+                    color: #333;
+                    padding: 20px;
+                }}
+                .container {{
+                    max-width: 600px;
+                    margin: 0 auto;
+                    background-color: #ffffff;
+                    padding: 30px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                }}
+                h1 {{
+                    color: #4CAF50;
+                }}
+                .button {{
+                    display: inline-block;
+                    padding: 10px 20px;
+                    margin-top: 20px;
+                    background-color: #4CAF50;
+                    color: white;
+                    text-decoration: none;
+                    border-radius: 4px;
+                    font-weight: bold;
+                }}
+                .footer {{
+                    font-size: 12px;
+                    text-align: center;
+                    color: #777;
+                    margin-top: 20px;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Thank You for Your Purchase!</h1>
+                <p>We are processing your order. Below are the details:</p>
+                <ul>
+                    <li><strong>Order Number:</strong> #123456</li>
+                    <li><strong>Amount:</strong> ${total}</li>
+                    <li><strong>Status:</strong> Pending</li>
+                </ul>
+                <a href="http://yourwebsite.com" class="button">View Order</a>
+            </div>
+            <div class="footer">
+                <p>Thank you for shopping with us!</p>
+                <p><small>If you did not make this purchase, please contact our support immediately.</small></p>
+            </div>
+        </body>
+    </html>
+    """
+
     mail = Mail(app)
     user_acount = session.get('correo')
-
-    msg = Message(subject = 'Ticket de compra', sender='20223tn080@utez.edu.mx', recipients=[user_acount],body="This is the plain text body",html="<p>This is the HTML body</p>" )
+    msg = Message(subject = 'Ticket de compra',
+                    sender='20223tn080@utez.edu.mx',
+                    recipients=[user_acount],
+                    body="This is the plain text body",
+                    html=html_body
+                    )
 
     mail.send(msg)
     return jsonify({'mensaje': 'Compra exitosa'})
+
 
 @app.route('/admin_libro')
 def admin_libro():

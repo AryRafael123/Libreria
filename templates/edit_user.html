@@ -1,3 +1,5 @@
+
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -27,66 +29,53 @@
 
 				<!-- name -->
 		      	<div class="form-group">
-		      		<input type="text" class="form-control" placeholder="New name" name="name" required>
+					<label for="name">Name:</label>
+		      		<input type="text" class="form-control"  name="name" value="{{data['nombre']}}" required>
 		      	</div>
 
 				<!-- last_name -->
 				<div class="form-group">
-					<input type="text" class="form-control" placeholder="New last name" name="last_name" required>
+					<label for="last_name">Last name:</label>
+					<input type="text" class="form-control"  name="last_name" value="{{data['apellido']}}" required>
 				</div>
 							
 				<!-- user_name -->
 				<div class="form-group">
-					<input type="text" class="form-control" placeholder="New user name" name="user_name" required>
+					<label for="user_name">User name:</label>
+					<input type="text" class="form-control"  name="user_name" value="{{data['nombre_usuario']}}" required>
 				</div>
 
 				<!-- address -->
 				<div class="form-group">
-					<input type="text" class="form-control" placeholder="New address" name="address" required>
+					<label for="address">Address:</label>
+					<input type="text" class="form-control" name="address" value="{{data['direccion']}}" required>
 				</div>
 
 				<!-- phone -->
 				<div class="form-group">
-					<input type="text" class="form-control" placeholder="New phone" name="phone" required>
+					<label for="phone">Phone:</label>
+					<input type="text" class="form-control"  name="phone" value="{{data['teléfono']}}" required>
 				</div>
 			
 				<!-- mail -->
 				<div class="form-group">
-					<input type="text" class="form-control" placeholder="New email" name="mail" required>
+					<label for="mail">Mail:</label>
+					<input type="text" class="form-control"  name="mail" value="{{data['correo']}}" required>
 				</div>
 
 				<!-- password -->
 				<div class="form-group">
-	              <input id="password-field" type="password" class="form-control" placeholder="New password" name="password" required>
+					<label for="password">Password:</label>
+	              <input id="password-field" type="password" class="form-control" name="password" value="{{data['contraseña']}}" required>
 	              <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
 	            </div>
 				
-
+				<hr>
 
 	            <div class="form-group">
 	            	<button type="submit" class="form-control btn btn-primary submit px-3">Update</button>
 	            </div>
-	            <div class="form-group d-md-flex">
-	            	<div class="w-50">
-		            	<label class="checkbox-wrap checkbox-primary">Remember Me
-									  <input type="checkbox" checked>
-									  <span class="checkmark"></span>
-									</label>
-								</div>
-								<div class="w-50 text-md-right">
-									<a href="#" style="color: #fff">Forgot Password</a>
-								</div>
-	            </div>
-	          	</form>
-	          <p class="w-100 text-center">&mdash; Or Sign In With &mdash;</p>
-	          <div class="social d-flex text-center">
-	          	<a href="#" class="px-2 py-2 mr-md-1 rounded"><span class="ion-logo-facebook mr-2"></span> Facebook</a>
-	          	<a href="#" class="px-2 py-2 ml-md-1 rounded"><span class="ion-logo-twitter mr-2"></span> Twitter</a>
-	          </div>
-		      </div>
-				</div>
-			</div>
-		</div>
+	           
 	</section>
 
 	<script src="js/jquery.min.js"></script>

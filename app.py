@@ -749,8 +749,11 @@ def buy_Items():
             prices.append(books_prices) # [[{'precio': 500.0}], [{'precio': 800.0}]]
     
         #record the purchases
+        
+        total = 0
         for x in range(0,len(booksIDS)):#                                                                                     Libros comprados              total a pagar por libro                usuario      id libro
             cursor.execute('INSERT INTO Compras (Libros_comprados, total, id_usuario, id_libro) VALUES (%s,%s,%s,%s)',(AmountPerBook[x][0]['cantidad'],(prices[x][0]['precio'])*(AmountPerBook[x][0]['cantidad']) ,userID, booksIDS[x]['id_libro']))
+            total += (prices[x][0]['precio'])*(AmountPerBook[x][0]['cantidad'])
 
         #add purchases to the user
         cursor.execute("""SELECT Libros_comprados FROM Usuarios WHERE correo = %s  """, (user_acount))
@@ -776,10 +779,82 @@ def buy_Items():
             new_stock = value['stock'] - AmountPerBook[x][0]['cantidad']
             cursor.execute ("""UPDATE Libros SET stock = %s WHERE id_libro=%s""", (new_stock, booksIDS[x]['id_libro']))
 
+        nombre = session.get('nombre_usuario')
 
         connection.commit()  # Commit changes to the database
     connection.close()
     
+    html_body = f"""
+    <html>
+        <head>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f9;
+                    color: #333;
+                    padding: 20px;
+                }}
+                .container {{
+                    max-width: 600px;
+                    margin: 0 auto;
+                    background-color: #ffffff;
+                    padding: 30px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                }}
+                h1 {{
+                    color: #4CAF50;
+                }}
+                .button {{
+                    display: inline-block;
+                    padding: 10px 20px;
+                    margin-top: 20px;
+                    background-color: #4CAF50;
+                    color: white;
+                    text-decoration: none;
+                    border-radius: 4px;
+                    font-weight: bold;
+                }}
+                .footer {{
+                    font-size: 12px;
+                    text-align: center;
+                    color: #777;
+                    margin-top: 20px;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Thank You {nombre} for Your Purchases!</h1>
+                <p>We are processing your order. Below are the details:</p>
+                <ul>
+                    <li><strong>Order Number:</strong> #123456</li>
+                    <li><strong>Amount:</strong> ${total}</li>
+                    <li><strong>Status:</strong> Pending</li>
+                </ul>
+                <a href="http://yourwebsite.com" class="button">View Order</a>
+            </div>
+            <div class="footer">
+                <p>Thank you for shopping with us!</p>
+                <p><small>If you did not make this purchase, please contact our support immediately.</small></p>
+            </div>
+        </body>
+    </html>
+    """
+
+    mail = Mail(app)
+    user_acount = session.get('correo')
+    msg = Message(subject = 'Ticket de compra',
+                    sender='20223tn080@utez.edu.mx',
+                    recipients=[user_acount],
+                    body="This is the plain text body",
+                    html=html_body
+                    )
+
+    mail.send(msg)
+
+
+
     return view_index(False)
     
 
@@ -947,6 +1022,9 @@ def comprarLibro():
         print("NUEVOSTOCK: ", nuevoStock)
         print("ID_LIBROOO: ", data['id_libro'])  
         cursor.execute ("""UPDATE Libros SET stock = %s WHERE id_libro=%s""", (nuevoStock, data['id_libro']))
+
+        nombre = session.get('nombre_usuario')
+
         connection.commit()
     connection.close()
 
@@ -993,7 +1071,7 @@ def comprarLibro():
         </head>
         <body>
             <div class="container">
-                <h1>Thank You for Your Purchase!</h1>
+                <h1>Thank You {nombre} for Your Purchase!</h1>
                 <p>We are processing your order. Below are the details:</p>
                 <ul>
                     <li><strong>Order Number:</strong> #123456</li>

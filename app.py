@@ -323,8 +323,8 @@ def LOG_OUT():
     return render_template('index.html')
 
 
-@app.route('/add_user', methods=['POST'])
-def ADD_USER():
+@app.route('/create_account', methods=['POST'])
+def create_account():
 
     # This is the form data that Flask receives
     name = request.form['name']  # Flask looks for the 'username' key
@@ -332,17 +332,30 @@ def ADD_USER():
     user_name = request.form['user_name']
     address = request.form['address']
     phone = request.form['phone']
-    mail = request.form['mail']
+    email = request.form['email']
     password = request.form['password']
     
+    exist = False
+    print("ADENTROO")
+
     # Insert the new user into the database
     connection = get_db_connection()
     with connection.cursor() as cursor:
-        cursor.execute('INSERT INTO Usuarios (tipo_usuario, nombre, apellido, nombre_usuario, direccion, teléfono, correo, contraseña) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)',(True, name, last_name, user_name, address, phone, mail, password))
-        connection.commit()  # Commit changes to the database
-    connection.close()
 
-    return render_template('index.html')
+        cursor.execute("""SELECT * FROM Usuarios WHERE correo = %s  """, (email))
+        value = cursor.fetchone()
+
+        if value == None:
+            cursor.execute('INSERT INTO Usuarios (tipo_usuario, nombre, apellido, nombre_usuario, direccion, teléfono, correo, contraseña) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)',(False, name, last_name, user_name, address, phone, email, password))
+            connection.commit()
+            connection.close()
+            return jsonify({'exists': False, 'redirect_url': url_for('index')})
+            
+        else:
+            connection.close()
+            return jsonify({'exists': True})
+            
+    
 
 
 #This action takes to the template of add user (edit user)
@@ -355,8 +368,7 @@ def template_edit_user():
     connection = get_db_connection()
     with connection.cursor() as cursor:
         cursor.execute("""SELECT * FROM Usuarios WHERE id_usuario = %s  """, (user_id))
-        value = cursor.fetchone()
-        print("this is the valueeeeee ",value)
+        value = cursor.fetchone() # {'id_usuario': 1, 'tipo_usuario': 0, 'nombre': 'Ary Rafael', 'apellido': 'Sánchez Hernández', 'nombre_usuario': 'Ary123', 'direccion': 'Morelos', 'teléfono': '7775955444', 'correo': '20223tn078@utez.edu.mx', 'contraseña': 'ary12345', 'libros_comprados': None, 'id_opinion': None}
         connection.commit()
     connection.close()
 

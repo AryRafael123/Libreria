@@ -16,6 +16,18 @@
 
 	</head>
 	<body class="img js-fullheight" style="background-image: url(static/images/bg.jpg);">
+
+
+		<!-- Modal for showing email exists error -->
+		<div id="emailErrorModal" class="modal" style="display:none;">
+			<div class="modal-content">
+				<span class="close-btn" onclick="closeModal()">&times;</span>
+				<p>Email already exists! Please use a different one.</p>
+			</div>
+		</div>
+
+
+
 	<section class="ftco-section">
 		<div class="container">
 			
@@ -23,7 +35,7 @@
 				<div class="col-md-6 col-lg-4">
 					<div class="login-wrap p-0">
 		      	<h3 class="mb-4 text-center">Create an account</h3>
-		      	<form action="/sign_up" class="signin-form", method="POST">
+		      	<form id="form_add_user" >
 
 				<!-- name -->
 		      	<div class="form-group">
@@ -52,7 +64,7 @@
 			
 				<!-- mail -->
 				<div class="form-group">
-					<input type="text" class="form-control" placeholder="email" name="mail" required>
+					<input type="email" class="form-control" placeholder="email" id="email" name="email" required>
 				</div>
 
 				<!-- password -->
@@ -66,27 +78,8 @@
 	            <div class="form-group">
 	            	<button type="submit" class="form-control btn btn-primary submit px-3">Create User</button>
 	            </div>
-	            <div class="form-group d-md-flex">
-	            	<div class="w-50">
-		            	<label class="checkbox-wrap checkbox-primary">Remember Me
-									  <input type="checkbox" checked>
-									  <span class="checkmark"></span>
-									</label>
-								</div>
-								<div class="w-50 text-md-right">
-									<a href="#" style="color: #fff">Forgot Password</a>
-								</div>
-	            </div>
 	          	</form>
-	          <p class="w-100 text-center">&mdash; Or Sign In With &mdash;</p>
-	          <div class="social d-flex text-center">
-	          	<a href="#" class="px-2 py-2 mr-md-1 rounded"><span class="ion-logo-facebook mr-2"></span> Facebook</a>
-	          	<a href="#" class="px-2 py-2 ml-md-1 rounded"><span class="ion-logo-twitter mr-2"></span> Twitter</a>
-	          </div>
-		      </div>
-				</div>
-			</div>
-		</div>
+	         
 	</section>
 
 	<script src="js/jquery.min.js"></script>
@@ -94,6 +87,40 @@
   <script src="js/bootstrap.min.js"></script>
   <script src="js/main.js"></script>
 
+
+  <script>
+	document.getElementById('form_add_user').addEventListener('submit', function(e) {
+	  e.preventDefault(); // Prevent form from submitting normally
+  
+	  const formData = new FormData(this);
+  
+	  fetch('/create_account', {
+		method: 'POST',
+		body: formData
+	  })
+	  .then(res => res.json())
+	  .then(data => {
+		if (data.exists) {
+		  // Show modal if user exists
+		  document.getElementById('emailErrorModal').style.display = 'block';
+		} else {
+		  // Redirect or show success message
+		  alert('Registration successful!');
+		  window.location.href = data.redirect_url;  // Redirect to index
+		}
+	  });
+	});
+  
+	function closeModal() {
+	  document.getElementById('emailErrorModal').style.display = 'none';
+	}
+  </script>
+
+
+
 	</body>
 </html>
+
+
+
 

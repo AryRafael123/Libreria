@@ -22,6 +22,15 @@ PAYPAL_CLIENT_ID = "AVuuO9ebw5JS7AptdgDMyhQ14Knq3udTdRxTB3RZfkp8rIEQyQYwpaPH5PzQ
 PAYPAL_SECRET = "EM438loYDqhR55FrnTEiezbsmAMb9-B4247yUeJ0mJgFY8RSsqunBmZotxpgxDtW1MghjuYTNS7OAorT"
 PAYPAL_API_BASE = "https://sandbox.paypal.com"  # Sandbox URL
 
+#code to send an email
+# Configuración del servidor de correo
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = '20223tn080@utez.edu.mx'
+app.config['MAIL_PASSWORD'] = 'zdjk lpob yuxq yrtb'    
+
+
 # route to redirect a user 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -790,7 +799,6 @@ def template_purchases():
     return render_template('template_purchases.html',labels = load_labels(), BOOKS = books, rango = rango, list_amount = amount) 
 
 
-
 @app.route('/book_rating', methods=['POST'])
 def book_rating():
     INDICE = int(request.form['id_libro'])
@@ -917,14 +925,7 @@ def comprarLibro():
         connection.commit()
     connection.close()
 
-    #code to send an email
-    # Configuración del servidor de correo
-    app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-    app.config['MAIL_PORT'] = 587
-    app.config['MAIL_USE_TLS'] = True
-    app.config['MAIL_USERNAME'] = '20223tn080@utez.edu.mx'
-    app.config['MAIL_PASSWORD'] = 'zdjk lpob yuxq yrtb'    
-
+    
     mail = Mail(app)
     user_acount = session.get('correo')
 

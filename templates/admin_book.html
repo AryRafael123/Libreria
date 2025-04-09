@@ -1,0 +1,133 @@
+
+    {% extends 'admin.html' %}
+
+    {% block contenido %}
+        
+        <!--<div id="layoutSidenav">
+            <div id="layoutSidenav_content">-->
+            <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">Inventario Libros</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item"><a href="{{ url_for('admin_libro') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Libros</li>
+                        </ol>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
+                            <button type="button" class="btn btn-primary me-md-2 btn-lg" data-bs-toggle="modal" data-bs-target="#exampleModal">Nuevo</button>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Inventario de Libros
+                            </div>
+                            <div class="card-body">
+                            <table id="tableLibrosAdmin" class="display" style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Autor</th>
+                                        <th>Descripción</th>
+                                        <th>Editorial</th>
+                                        <th>Cantidad</th>
+                                        <th>Precio $</th>
+                                        <th>Editar</th>
+                                        <th>Eliminar</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Autor</th>
+                                        <th>Descripción</th>
+                                        <th>Editorial</th>
+                                        <th>Cantidad</th>
+                                        <th>Precio $</th>
+                                        <th>Editar</th>
+                                        <th>Eliminar</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+
+                <!-- Modal para inventario -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Inventario</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                        <form action="/add_book" method="POST" enctype="multipart/form-data">
+
+                            <div class="mb-2">
+                                <label class="form-label" for="basic-default-fullname">Book Title:</label>
+                                <input type="text" class="form-control" id="book-title" placeholder="Nombre Libro" name="book-title" required />
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label" for="basic-default-company">Autor:</label>
+                                <input type="text" class="form-control" placeholder="Autor" id="book-autor" name="book-autor" required />
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label" for="basic-default-company">Editorial:</label>
+                                <input type="text" class="form-control" placeholder="Editorial" id="book-editorial" name="book-editorial" required />
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label" for="basic-default-company">Descripcion:</label>
+                                <textarea class="form-control" placeholder="Descripcion" id="book-description" name="book-description" required></textarea>
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label" for="basic-default-company">Stock:</label>
+                                <input type="number" class="form-control" placeholder="Stock" id="book-stock" name="book-stock" required />
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label" for="basic-default-company">Imagen:</label>
+                                <input type="file" class="form-control" placeholder="Imagen" id="book-image" name="image" />
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label" for="basic-default-company">Price ($):</label>
+                                <input type="number" class="form-control" placeholder="Precio" id="book-price" name="book-price" required />
+                            </div>
+                        
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Agregar</button>
+                        </div>
+                        </form>
+                    </div>
+                    </div>
+                </div>
+
+
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; Your Website 2023</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+        <!--    </div>
+        </div>-->
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script type="text/javascript"  src=" https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+        <script src="static/js/data.js"></script>
+        <script>
+            mostrarLibroAdmin();
+        </script>
+    {% endblock %}

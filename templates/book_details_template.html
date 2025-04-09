@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-
+<!--HASSIEL-->
 
 {% block content %}
 <head>
@@ -10,13 +10,23 @@
 
     <!-- Initialize the JS-SDK -->
     
-    <script src="https://www.paypal.com/sdk/js?client-id=AbducxexQw-HObCokRA9XyCiXRiKyprjWc7FxOKhBQGKZlIAheWIRrs_R6fZ1MUQwXTE4K3uY2fafUGF&currency=USD"></script>
-
+    <!--<script src="https://www.paypal.com/sdk/js?client-id=AbducxexQw-HObCokRA9XyCiXRiKyprjWc7FxOKhBQGKZlIAheWIRrs_R6fZ1MUQwXTE4K3uY2fafUGF&currency=USD"></script>-->
+    <script src="https://www.paypal.com/sdk/js?client-id=AVuuO9ebw5JS7AptdgDMyhQ14Knq3udTdRxTB3RZfkp8rIEQyQYwpaPH5PzQizyXubwN5xHsmyx58oW-&currency=MXN"></script>
+    
     <script>
+        
          paypal.Buttons({
             createOrder: function(data, actions) {
+                var precioLibro = document.getElementById('Precio').value;
+                var cantidad = document.getElementById('cantidad').value;
+                var total = precioLibro * cantidad;
+
                 return fetch('/create_order', {
-                    method: 'POST'
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({precio: total})
                 }).then(response => response.json())
                 .then(order => order.id);
             },
@@ -27,6 +37,7 @@
                 .then(order => {
                     alert('Payment Successful!');
                     console.log(order);
+                    comprarAhora();
                 });
             }
         }).render('#paypal-button-container');
@@ -55,6 +66,7 @@
                   <div class="amount">
                     
                         <label for="cantidad">Amount:</label>
+                        <input type="hidden" name="id_libro" value="{{Indice}}" id="id_libro">
                         <input type="number" id="cantidad" name="cantidad" min="1" max="{{libros.stock}}" value="1" required> <!-- cantidad-->
                         <input type="hidden" value = "{{costos.precio}}" id="Precio" > <!-- precio -->
                                          
@@ -141,12 +153,13 @@
     
 
     <span class="heading">User Rating</span>
-    <span class="fa fa-star checked"></span>
-    <span class="fa fa-star checked"></span>
-    <span class="fa fa-star checked"></span>
-    <span class="fa fa-star checked"></span>
-    <span class="fa fa-star"></span>
+    <span class="fa fa-star" data-rating="1"></span>
+    <span class="fa fa-star" data-rating="2" ></span>
+    <span class="fa fa-star" data-rating="3" ></span>
+    <span class="fa fa-star" data-rating="4" ></span>
+    <span class="fa fa-star" data-rating="5" ></span>
     <p>{{total}} average based on {{views}} reviews.</p>
+    <input type="hidden" value="{{total}}" id="average" >
     <input type="hidden" value="{{views}}" id="total-views">
     <hr style="border:3px solid #f1f1f1">
 
@@ -242,8 +255,8 @@
     {% endfor %}    
 
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    -->
 
 <!--script to display the raiting-->
 <script>
@@ -319,6 +332,21 @@ var TotalCompras = document.getElementById('NumeroCompras');
 
 </script>
 
+<script>
+
+    let average = document.getElementById('average').value;
+  
+     // selected stars
+     let allstars =  document.querySelectorAll('.fa-star');
+            allstars.forEach(star => {
+                if (parseInt(star.getAttribute('data-rating')) <= average) {
+                    star.classList.add('checked');  // Highlight selected stars
+                } else {
+                    star.classList.remove('checked');  // Remove highlight for unselected stars
+                }
+            });
+
+  </script>
 
 
 

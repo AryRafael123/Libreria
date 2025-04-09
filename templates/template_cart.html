@@ -44,33 +44,50 @@
 
 <!--section to show all the items in the cart-->
 <section id="catalog" class="section">
-    <h2>Cart</h2>
-       
-        {% for x in range(0,rango) %}
-                <section class="section">
-                        <div class="catalog-items">
-                          <div class="item-position-relative">
-                              <!--book-->
-                              
-                                <h3>{{Books[x][0]['nombre_libro'] }}</h3>
-                                <p>{{Books[x][0]['autor']}}</p>
-                             
-                                
-                                <img id="item-image" src="{{ Books[x][0]['imagen'] }}" alt="">
-                              
-                                <!--button-->
-                          </div>
-                          <div>
-                              <button id="bookID"  value="{{Books[x][0]['id_libro']}}"   type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#{{x}}" >Display</button>
-                                      
-                          </div>
 
-                          </div>
+    <main>
+      <div class="container-fluid px-4">
+          <h1 class="mt-4">Tu Carrito</h1>
+          <!--<div class="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
+              <button type="button" class="btn btn-primary me-md-2 btn-lg" data-bs-toggle="modal" data-bs-target="#exampleModal">Nuevo</button>
+          </div>-->
+          <div class="card mb-4">
+              <div class="card-header">
+                  <i class="fas fa-table me-1"></i>
+                  Carrito de Compras
+              </div>
+              <div class="card-body">
+              <table id="tableCarrito" class="display" style="width: 100%">
+                  <thead>
+                      <tr>
+                          <th>Libro</th>
+                          <th>Nombre Libro</th>
+                          <th>Autor</th>
+                          <th>Descripcion</th>
+                          <th>Cantidad</th>
+                          <th>Precio U</th>
+                          <th>Total</th>
+                          <th>Eliminar</th>
+                      </tr>
+                  </thead>
+                  <tfoot>
+                      <tr>
+                          <th>Libro</th>
+                          <th>Nombre Libro</th>
+                          <th>Autor</th>
+                          <th>Descripcion</th>
+                          <th>Cantidad</th>
+                          <th>Precio U</th>
+                          <th>Total</th>
+                          <th>Eliminar</th>
+                      </tr>
+                  </tfoot>
+              </table>
+              </div>
+          </div>
+      </div>
+    </main>
 
-                        </div>
-                    
-                  </section>  
-        {% endfor %}
     <!-- cart empty-->     
     {%else %}
 
@@ -81,6 +98,8 @@
 
        
   {% endif %}   
-        
+   <script>
+      mostrarCarrito();
+   </script>      
 
 {% endblock %}

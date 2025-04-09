@@ -142,6 +142,9 @@ ALTER TABLE Items
 ADD COLUMN id_precio INT;
 
 ALTER TABLE Items
+ADD COLUMN total INT;
+
+ALTER TABLE Items
 ADD CONSTRAINT fk_Items_Precio FOREIGN KEY (id_precio)
 REFERENCES Costos (id_precio);
 

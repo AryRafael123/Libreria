@@ -80,16 +80,16 @@ h2 {
     border-radius: 4px;
     margin-top: 10px;
 }
-/*
+
 .catalog-items .item button:hover {
     background-color: #218838;
 }
-*/
+/*
 form {
     display: flex;
     flex-direction: column;
 }
-
+*/
 form label {
     margin: 10px 0 5px;
 }
@@ -166,20 +166,26 @@ margin-top: 10px;
 /* Header styling */
 header {
     background-color: #333;
-    color: #fff;
-    padding: 1rem;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
+/*this piece of shit changes the menu ****************************
 header nav ul {
     list-style: none;
     display: flex;
     justify-content: center;
     gap: 1.5rem;
 }
+*/
 
 header nav ul li {
     margin: 0;
 }
+
 
 header nav ul li a {
     text-decoration: none;
@@ -188,6 +194,8 @@ header nav ul li a {
     transition: color 0.3s ease;
 }
 
+
+/*PROBABLY FROM HERE, THE DESIGN CHANGES THE MENU-------------------------------*/
 header nav ul li a:hover {
     color: #f39c12;
 }
@@ -410,4 +418,8 @@ vertical-align: top;
 min-height: 30px;
 max-height: 55px;
 margin-bottom: 14px;
+}
+
+.navbar-collapse {
+    background-color: transparent !important;
 }

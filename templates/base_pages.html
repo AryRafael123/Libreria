@@ -6,97 +6,107 @@
     <title>Library Shopping</title>
     <link rel="stylesheet" href="../static/css/base_pages.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-</head>
+
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+    <script src="static/js/scripts.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script type="text/javascript"  src=" https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+
+  </head>
 <body>
 
 
 
     <header>
         
-        <nav class="navbar navbar-dark bg-dark fixed-top">
+      <nav class="navbar navbar-dark bg-dark fixed-top">
 
-              <div class="logo">
-                <h1>Library Shopping</h1>
-              </div>
+        <div class="logo">
+          <h1>Library Shopping</h1>
+        </div>
 
-              <!--button menu-->
-              <div class="button-menu">
-                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-                </button>
-              </div>
+        <!--button menu-->
+        <div class="button-menu">
+          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+        <!---->
+
+      <div class="container-fluid">
+        <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Dark offcanvas</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+           
+            <form class="d-flex mt-3" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-success" type="submit">Search</button>
+            </form>
               <!---->
+              <div class="navbar-actions">
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Home</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Notifications</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Favorites</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">History</a>
+                      </li>
 
-            <div class="container-fluid">
-              <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
-                <div class="offcanvas-header">
-                  <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Dark offcanvas</h5>
-                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                 
-                  <form class="d-flex mt-3" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-success" type="submit">Search</button>
-                  </form>
-                    <!---->
-                    <div class="navbar-actions">
-                          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                            <li class="nav-item">
-                              <a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Home</a>
-                            </li>
-                            <li class="nav-item">
-                              <a class="nav-link" href="#">Notifications</a>
-                            </li>
-                            <li class="nav-item">
-                              <a class="nav-link" href="#">Favorites</a>
-                            </li>
-                            <li class="nav-item">
-                              <a class="nav-link" href="#">History</a>
-                            </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('template_labels') }}">Edit button labels</a>
+                      </li>
 
-                            <li class="nav-item">
-                              <a class="nav-link" href="{{ url_for('template_labels') }}">Edit button labels</a>
-                            </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('template_add_cart') }}">Cart</a>
+                      </li>
 
-                            <li class="nav-item">
-                              <a class="nav-link" href="{{ url_for('template_add_cart') }}">Cart</a>
-                            </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('template_purchases') }}">Purchases</a>
+                      </li>
 
-                            <li class="nav-item">
-                              <a class="nav-link" href="{{ url_for('template_purchases') }}">Purchases</a>
-                            </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('template_edit_user') }}">Edit user</a>
+                      </li>
 
-                            <li class="nav-item">
-                              <a class="nav-link" href="{{ url_for('template_edit_user') }}">Edit user</a>
-                            </li>
-
-                            <li class="nav-item">
-                              <form action="log_out" class="log_out-button">
-                                <button type="button" id="liveToastBtn">{{ labels['buttons']['logout'] }}</button>
-                              </form>
-                              
-                            </li>
-                            <li class="nav-item dropdown">
-                              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Dropdown
-                              </a>
-                              <ul class="dropdown-menu dropdown-menu-dark">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li>
-                                  <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                              </ul>
-                            </li>
-                          </ul>
-                    </div>
-                </div>
+                      <li class="nav-item">
+                        <form action="log_out" class="log_out-button">
+                          <button type="button" id="liveToastBtn">{{ labels['buttons']['logout'] }}</button>
+                        </form>
+                        
+                      </li>
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Dropdown
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                          <li><a class="dropdown-item" href="#">Action</a></li>
+                          <li><a class="dropdown-item" href="#">Another action</a></li>
+                          <li>
+                            <hr class="dropdown-divider">
+                          </li>
+                          <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                      </li>
+                    </ul>
               </div>
-            </div>
+          </div>
+        </div>
+      </div>
 
-          </nav>
+    </nav>
 
     </header>
 
@@ -119,10 +129,12 @@
       <!---->
     </div>
 
-<main>
+<main class="wrapper">
+   <!--this line helps to push the footer down / but this affect the user rating-->
+    {% block content %}
+    {% endblock %}
   
-  {% block content %}
-  {% endblock %}
+  
 
 </main>
 
@@ -163,8 +175,5 @@
       })
       }
   </script>
-
-{% block script %}
-{% endblock %}
 
 </body>

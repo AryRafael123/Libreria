@@ -498,6 +498,8 @@ def book_details():
         cursor.execute("""SELECT * FROM Opiniones WHERE id_libro = %s  """, (INDICE))
         value4 = cursor.fetchall()
 
+        
+
         #we save the comments in a list
         comentarios = []
         for x in range(0,len(value4)):
@@ -929,6 +931,8 @@ def book_rating():
             cursor.execute ("""UPDATE Opiniones SET estrellas = %s, comentario = %s  WHERE id_libro=%s""", (rating, comentario, INDICE))
         else:
             cursor.execute('INSERT INTO Opiniones (estrellas, id_libro, id_usuario, comentario) VALUES (%s,%s,%s,%s)',(rating ,INDICE, userID, comentario))
+
+        print("COMENTARIOS ",comentario)
 
         connection.commit()  # Commit changes to the database
     connection.close()

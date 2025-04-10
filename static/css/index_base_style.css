@@ -268,16 +268,50 @@ main {
   box-sizing: border-box;
 }
 
-.user-rating {
-  font-family: Arial;
-  margin: 0 auto; /* Center website */
-  max-width: 800px; /* Max width */
-  padding: 20px;
 
-  margin: 2rem 0;
-  gap: 2rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+/*hola*/
+.rating-comments-wrapper {
+    display: flex;
+    
+    gap: 2rem;
+    flex-wrap: wrap; /* Optional: wrap on smaller screens */
+  }
+  
+  /* Keep your existing styles */
+  .user-rating, .comments {
+    flex: 1;
+    max-width: 45%;
+    padding: 5px;
+    font-family: Arial;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+/*hola*/
+
+.user-rating {
+
+flex: 1; /* Makes both sections share equal space */
+padding: 20px;
+font-family: Arial;
+margin: 0 auto; /* Center website */
+max-width: 45%; /* Max width */
+padding: 20px;
+margin: 2rem 0;
+gap: 2rem;
+box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
+
+.comments {
+
+flex: 1; /* Makes both sections share equal space */
+padding: 20px;
+font-family: Arial;
+margin: 0 auto; /* Center website */
+max-width: 45%; /* Max width */
+padding: 20px;
+margin: 2rem 0;
+gap: 2rem;
+box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
 
 .heading {
   font-size: 25px;
